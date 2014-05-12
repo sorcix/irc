@@ -41,7 +41,7 @@ func Dial(addr string) (*Conn, error) {
 	}
 }
 
-// Send is an alias for Decode and implements the Sender interface.
+// Send is an alias for Encode and implements the Sender interface.
 func (c *Conn) Send(m *Message) error {
 	return c.Encoder.Encode(m)
 }
