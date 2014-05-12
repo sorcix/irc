@@ -2,11 +2,14 @@ package irc
 
 // Various prefixes extracted from RFC1459.
 const (
-	CHANNEL     = '#' // Normal channels
-	DISTRIBUTED = '&' // Distributed channels
+	Channel     = '#' // Normal channel
+	Distributed = '&' // Distributed channel
 
-	OPERATOR = '@' // User is channel operator
-	VOICE    = '+' // User has voice
+	Owner        = '~' // Channel owner +q (non-standard)
+	Admin        = '&' // Channel admin +a (non-standard)
+	Operator     = '@' // Channel operator +o
+	HalfOperator = '%' // Channel half operator +h (non-standard)
+	Voice        = '+' // User has voice +v
 )
 
 // IRC commands replies extracted from RFC2812 section 3.
