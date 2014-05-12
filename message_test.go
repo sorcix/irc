@@ -2,9 +2,9 @@ package irc
 
 import (
 	"testing"
+	"reflect"
 )
 
-// MessageTest
 type messageTest struct {
 	parsed     *Message
 	rawMessage string
@@ -131,6 +131,10 @@ var messageTests = [10]*messageTest{
 	},
 }
 
+// -----
+// PREFIX
+// -----
+
 func TestPrefix_String(t *testing.T) {
 	var s string
 
@@ -196,6 +200,10 @@ func TestParsePrefix(t *testing.T) {
 	}
 }
 
+// -----
+// MESSAGE
+// -----
+
 func TestMessage_String(t *testing.T) {
 	var s string
 
@@ -238,13 +246,17 @@ func TestParseMessage(t *testing.T) {
 		p = ParseMessage(test.rawMessage)
 
 		// Result struct should be the same as the value in parsed.
-		if !p.equals(test.parsed) {
+		if !reflect.DeepEqual(p, test.parsed) {
 			t.Errorf("Failed to parse prefix %d:", i)
 			t.Logf("Output: %#v", p)
 			t.Logf("Expected: %#v", test.parsed)
 		}
 	}
 }
+
+// -----
+// BENCHMARK
+// -----
 
 func BenchmarkPrefix_String_short(b *testing.B) {
 	prefix := new(Prefix)
@@ -295,19 +307,4 @@ func BenchmarkParseMessage_long(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		ParseMessage(":Namename!username@hostname COMMAND arg1 arg2 arg3 arg4 arg5 arg6 arg7 :Message message message message message\r\n")
 	}
-}
-
-func (m *Message) equals(o *Message) bool {
-
-	if (m.Prefix != nil && *m.Prefix != *o.Prefix) || m.Trailing != o.Trailing || m.Command != o.Command || len(m.Params) != len(o.Params) {
-		return false
-	}
-
-	for i, param := range m.Params {
-		if param != o.Params[i] {
-			return false
-		}
-	}
-
-	return true
 }
