@@ -102,6 +102,20 @@ func (p *Prefix) String() (s string) {
 	return
 }
 
+// writeTo is an utility function to write the prefix to the bytes.Buffer in Message.String().
+func (p *Prefix) writeTo(buffer *bytes.Buffer) {
+	buffer.WriteString(p.Name)
+	if len(p.User) > 0 {
+		buffer.WriteByte(prefixUser)
+		buffer.WriteString(p.User)
+	}
+	if len(p.Host) > 0 {
+		buffer.WriteByte(prefixHost)
+		buffer.WriteString(p.Host)
+	}
+	return
+}
+
 // Message represents an IRC protocol message.
 // See RFC1459 section 2.3.1.
 //
@@ -235,7 +249,7 @@ func (m *Message) Bytes() []byte {
 	// Message prefix
 	if m.Prefix != nil {
 		buffer.WriteByte(prefix)
-		buffer.WriteString(m.Prefix.String())
+		m.Prefix.writeTo(buffer)
 		buffer.WriteByte(space)
 	}
 
