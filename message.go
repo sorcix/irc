@@ -22,7 +22,7 @@ const (
 
 // An object that implements Sender is able to send IRC messages.
 type Sender interface {
-	Send(*Message)
+	Send(*Message) error
 }
 
 // Prefix represents the prefix (sender) of an IRC message.

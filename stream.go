@@ -4,9 +4,52 @@ import (
 	"bufio"
 	"io"
 	"sync"
+	"net"
 )
 
 const delim byte = '\n'
+
+// A Conn represents an IRC network protocol connection.
+// It consists of an Encoder and Decoder to manage I/O.
+type Conn struct {
+	Encoder
+	Decoder
+
+	conn io.ReadWriteCloser
+}
+
+// NewConn returns a new Conn using rwc for I/O.
+func NewConn(rwc io.ReadWriteCloser) *Conn {
+	return &Conn{
+		Encoder: Encoder {
+			writer: rwc,
+		},
+		Decoder: Decoder {
+			reader: bufio.NewReader(rwc),
+		},
+		conn: rwc,
+	}
+}
+
+// Dial connects to the given address using net.Dial and
+// then returns a new Conn for the connection.
+func Dial(addr string) (*Conn, error) {
+	if c, err := net.Dial("tcp", addr); err != nil {
+		return nil, err
+	} else {
+		return NewConn(c), nil
+	}
+}
+
+// Send is an alias for Decode and implements the Sender interface.
+func (c *Conn) Send(m *Message) error {
+	return c.Encoder.Encode(m)
+}
+
+// Close closes the underlying ReadWriteCloser.
+func (c *Conn) Close() error {
+	return c.conn.Close()
+}
 
 // A decoder reads Message objects from an input stream.
 type Decoder struct {
