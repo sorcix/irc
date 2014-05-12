@@ -18,6 +18,8 @@ const (
 	cutset string = "\r\n\t " // Characters to trim from prefixes/messages.
 
 	empty = "" // The empty string.
+
+	maxLength = 512
 )
 
 // An object that implements Sender is able to send IRC messages.
@@ -211,7 +213,7 @@ func ParseMessage(raw string) (m *Message) {
 
 // Validate returns true if this message is valid.
 func (m *Message) Validate() bool {
-	return len(m.Command) > 0 && m.Len() <= 512
+	return len(m.Command) > 0 && m.Len() <= maxLength
 }
 
 // Len calculates the length of the string representation of this message.
@@ -269,8 +271,8 @@ func (m *Message) Bytes() []byte {
 	}
 
 	// We need the limit the buffer to 510 bytes as the line ending takes 2 more.
-	if buffer.Len() > 510 {
-		buffer.Truncate(510)
+	if buffer.Len() > (maxLength - 2) {
+		buffer.Truncate(maxLength - 2)
 	}
 
 	buffer.WriteString(endline)
