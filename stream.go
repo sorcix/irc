@@ -3,8 +3,8 @@ package irc
 import (
 	"bufio"
 	"io"
-	"sync"
 	"net"
+	"sync"
 )
 
 const delim byte = '\n'
@@ -21,10 +21,10 @@ type Conn struct {
 // NewConn returns a new Conn using rwc for I/O.
 func NewConn(rwc io.ReadWriteCloser) *Conn {
 	return &Conn{
-		Encoder: Encoder {
+		Encoder: Encoder{
 			writer: rwc,
 		},
-		Decoder: Decoder {
+		Decoder: Decoder{
 			reader: bufio.NewReader(rwc),
 		},
 		conn: rwc,

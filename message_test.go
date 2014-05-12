@@ -1,8 +1,8 @@
 package irc
 
 import (
-	"testing"
 	"reflect"
+	"testing"
 )
 
 type messageTest struct {
