@@ -213,7 +213,7 @@ func ParseMessage(raw string) (m *Message) {
 
 // Validate returns true if this message is valid.
 func (m *Message) Validate() bool {
-	return len(m.Command) > 0 && m.Len() <= maxLength
+	return len(m.Command) > 0 && m.Len() <= maxLength && (m.Prefix == nil || m.Prefix.Validate())
 }
 
 // Len calculates the length of the string representation of this message.
