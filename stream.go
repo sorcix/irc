@@ -34,11 +34,13 @@ func NewConn(rwc io.ReadWriteCloser) *Conn {
 // Dial connects to the given address using net.Dial and
 // then returns a new Conn for the connection.
 func Dial(addr string) (*Conn, error) {
-	if c, err := net.Dial("tcp", addr); err != nil {
+	c, err := net.Dial("tcp", addr)
+
+	if err != nil {
 		return nil, err
-	} else {
-		return NewConn(c), nil
 	}
+
+	return NewConn(c), nil
 }
 
 // Send is an alias for Encode and implements the Sender interface.
@@ -51,7 +53,7 @@ func (c *Conn) Close() error {
 	return c.conn.Close()
 }
 
-// A decoder reads Message objects from an input stream.
+// A Decoder reads Message objects from an input stream.
 type Decoder struct {
 	reader *bufio.Reader
 	line   string
@@ -82,7 +84,7 @@ func (dec *Decoder) Decode() (*Message, error) {
 	return ParseMessage(dec.line), nil
 }
 
-// An encoder writes Message objects to an output stream.
+// An Encoder writes Message objects to an output stream.
 type Encoder struct {
 	writer io.Writer
 	err    error
