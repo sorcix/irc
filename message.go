@@ -71,13 +71,6 @@ func ParsePrefix(raw string) (p *Prefix) {
 	return p
 }
 
-// Validate returns true if this prefix is valid.
-//
-// For a prefix this means that at least the nickname field is not empty.
-func (p *Prefix) Validate() bool {
-	return len(p.Name) > 0
-}
-
 // Len calculates the length of the string representation of this prefix.
 func (p *Prefix) Len() (length int) {
 	length = len(p.Name)
@@ -209,11 +202,7 @@ func ParseMessage(raw string) (m *Message) {
 
 	return m
 
-}
 
-// Validate returns true if this message is valid.
-func (m *Message) Validate() bool {
-	return len(m.Command) > 0 && m.Len() <= maxLength && (m.Prefix == nil || m.Prefix.Validate())
 }
 
 // Len calculates the length of the string representation of this message.
