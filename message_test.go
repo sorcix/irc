@@ -259,6 +259,8 @@ func TestParseMessage(t *testing.T) {
 // -----
 
 func BenchmarkPrefix_String_short(b *testing.B) {
+	b.ReportAllocs()
+
 	prefix := new(Prefix)
 	prefix.Name = "Namename"
 
@@ -268,6 +270,8 @@ func BenchmarkPrefix_String_short(b *testing.B) {
 	}
 }
 func BenchmarkPrefix_String_long(b *testing.B) {
+	b.ReportAllocs()
+
 	prefix := new(Prefix)
 	prefix.Name = "Namename"
 	prefix.User = "Username"
@@ -279,31 +283,43 @@ func BenchmarkPrefix_String_long(b *testing.B) {
 	}
 }
 func BenchmarkParsePrefix_short(b *testing.B) {
+	b.ReportAllocs()
+
 	for i := 0; i < b.N; i++ {
 		ParsePrefix("Namename")
 	}
 }
 func BenchmarkParsePrefix_long(b *testing.B) {
+	b.ReportAllocs()
+
 	for i := 0; i < b.N; i++ {
 		ParsePrefix("Namename!Username@Hostname")
 	}
 }
 func BenchmarkMessage_String(b *testing.B) {
+	b.ReportAllocs()
+
 	for i := 0; i < b.N; i++ {
 		messageTests[0].parsed.String()
 	}
 }
 func BenchmarkParseMessage_short(b *testing.B) {
+	b.ReportAllocs()
+
 	for i := 0; i < b.N; i++ {
 		ParseMessage("COMMAND arg1 :Message\r\n")
 	}
 }
 func BenchmarkParseMessage_medium(b *testing.B) {
+	b.ReportAllocs()
+
 	for i := 0; i < b.N; i++ {
 		ParseMessage(":Namename COMMAND arg6 arg7 :Message message message\r\n")
 	}
 }
 func BenchmarkParseMessage_long(b *testing.B) {
+	b.ReportAllocs()
+
 	for i := 0; i < b.N; i++ {
 		ParseMessage(":Namename!username@hostname COMMAND arg1 arg2 arg3 arg4 arg5 arg6 arg7 :Message message message message message\r\n")
 	}
