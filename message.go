@@ -10,7 +10,6 @@ const (
 	prefix     byte = 0x3A // Prefix or last argument
 	prefixUser byte = 0x21 // Username
 	prefixHost byte = 0x40 // Hostname
-	ctcp       byte = 0x01 // Prefix and suffix for CTCP messages
 	space      byte = 0x20 // Separator
 
 	endline string = "\r\n" // Line endings for IRC messages.
