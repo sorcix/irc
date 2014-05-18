@@ -22,6 +22,11 @@ const (
 	maxLength = 512
 )
 
+// An object that implements Handler is able to process IRC messages.
+type Handler interface {
+	Handle(*Message, Sender)
+}
+
 // An object that implements Sender is able to send IRC messages.
 type Sender interface {
 	Send(*Message) error
@@ -126,7 +131,6 @@ func (p *Prefix) writeTo(buffer *bytes.Buffer) {
 //	                 NUL or CR or LF>
 //
 //	 <crlf>     ::= CR LF
-//
 type Message struct {
 	*Prefix
 	Command  string
@@ -201,7 +205,6 @@ func ParseMessage(raw string) (m *Message) {
 	m.Trailing = raw[i+1:]
 
 	return m
-
 
 }
 
