@@ -169,7 +169,7 @@ func ParseMessage(raw string) (m *Message) {
 	j = i + strings.IndexByte(raw[i:], space)
 
 	// Extract command
-	if j > 0 {
+	if j > i {
 		m.Command = raw[i:j]
 	} else {
 		m.Command = raw[i:]
