@@ -12,7 +12,7 @@ type messageTest struct {
 	paramLen   int
 }
 
-var messageTests = [10]*messageTest{
+var messageTests = [15]*messageTest{
 	&messageTest{
 		parsed: &Message{
 			Prefix: &Prefix{
@@ -128,6 +128,70 @@ var messageTests = [10]*messageTest{
 		},
 		rawMessage: ":irc.vives.lan 250 test :Highest connection count: 1 (1 connections received)\r\n",
 		rawPrefix:  "irc.vives.lan",
+	},
+	&messageTest{
+		parsed: &Message{
+			Prefix: &Prefix{
+				Name: "sorcix",
+				User: "~sorcix",
+				Host: "sorcix.users.quakenet.org",
+			},
+			Command:  "PRIVMSG",
+			Params:   []string{"#viveslan"},
+			Trailing: "\001ACTION is testing CTCP messages!\001",
+		},
+		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org PRIVMSG #viveslan :\001ACTION is testing CTCP messages!\001\r\n",
+		rawPrefix:  "sorcix!~sorcix@sorcix.users.quakenet.org",
+	},
+	&messageTest{
+		parsed: &Message{
+			Prefix: &Prefix{
+				Name: "sorcix",
+				User: "~sorcix",
+				Host: "sorcix.users.quakenet.org",
+			},
+			Command:  "NOTICE",
+			Params:   []string{"midnightfox"},
+			Trailing: "\001PONG 1234567890\001",
+		},
+		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org NOTICE midnightfox :\001PONG 1234567890\001\r\n",
+		rawPrefix:  "sorcix!~sorcix@sorcix.users.quakenet.org",
+	},
+	&messageTest{
+		parsed: &Message{
+			Prefix: &Prefix{
+				Name: "a",
+				User: "b",
+				Host: "c",
+			},
+			Command: "QUIT",
+		},
+		rawMessage: ":a!b@c QUIT\r\n",
+		rawPrefix:  "a!b@c",
+	},
+	&messageTest{
+		parsed: &Message{
+			Prefix: &Prefix{
+				Name: "a",
+				User: "b",
+			},
+			Command:  "PRIVMSG",
+			Trailing: "message",
+		},
+		rawMessage: ":a!b PRIVMSG :message\r\n",
+		rawPrefix:  "a!b",
+	},
+	&messageTest{
+		parsed: &Message{
+			Prefix: &Prefix{
+				Name: "a",
+				Host: "c",
+			},
+			Command:  "NOTICE",
+			Trailing: ":::Hey!",
+		},
+		rawMessage: ":a@c NOTICE ::::Hey!\r\n",
+		rawPrefix:  "a@c",
 	},
 }
 
