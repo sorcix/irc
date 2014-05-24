@@ -12,7 +12,7 @@ type messageTest struct {
 	paramLen   int
 }
 
-var messageTests = [15]*messageTest{
+var messageTests = [16]*messageTest{
 	&messageTest{
 		parsed: &Message{
 			Prefix: &Prefix{
@@ -192,6 +192,18 @@ var messageTests = [15]*messageTest{
 		},
 		rawMessage: ":a@c NOTICE ::::Hey!\r\n",
 		rawPrefix:  "a@c",
+	},
+	&messageTest{
+		parsed: &Message{
+			Prefix: &Prefix{
+				Name: "nick",
+			},
+			Command:  "PRIVMSG",
+			Params:   []string{"$@"},
+			Trailing: "This message contains a\ttab!",
+		},
+		rawMessage: ":nick PRIVMSG $@ :This message contains a\ttab!\r\n",
+		rawPrefix:  "nick",
 	},
 }
 

@@ -14,7 +14,7 @@ const (
 
 	endline string = "\r\n" // Line endings for IRC messages.
 
-	cutset string = "\r\n\t " // Characters to trim from prefixes/messages.
+	cutset string = "\r\n\x20\x00" // Characters to trim from prefixes/messages.
 
 	empty = "" // The empty string.
 
