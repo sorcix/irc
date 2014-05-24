@@ -13,7 +13,7 @@ type messageTest struct {
 }
 
 var messageTests = [16]*messageTest{
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "syrk",
@@ -26,7 +26,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":syrk!kalt@millennium.stealth.net QUIT :Gone to have lunch\r\n",
 		rawPrefix:  "syrk!kalt@millennium.stealth.net",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "Trillian",
@@ -38,7 +38,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":Trillian SQUIT cm22.eng.umd.edu :Server out of control\r\n",
 		rawPrefix:  "Trillian",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "WiZ",
@@ -51,7 +51,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone\r\n",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "WiZ",
@@ -65,7 +65,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":WiZ!jto@tolsun.oulu.fi PART #playzone :I lost\r\n",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "WiZ",
@@ -78,14 +78,14 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":WiZ!jto@tolsun.oulu.fi MODE #eu-opers -l\r\n",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Command: "MODE",
 			Params:  []string{"&oulu", "+b", "*!*@*.edu", "+e", "*!*@*.bu.edu"},
 		},
 		rawMessage: "MODE &oulu +b *!*@*.edu +e *!*@*.bu.edu\r\n",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Command:  "PRIVMSG",
 			Params:   []string{"#channel"},
@@ -93,7 +93,7 @@ var messageTests = [16]*messageTest{
 		},
 		rawMessage: "PRIVMSG #channel :Message with :colons!\r\n",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "irc.vives.lan",
@@ -105,7 +105,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":irc.vives.lan 251 test :There are 2 users and 0 services on 1 servers\r\n",
 		rawPrefix:  "irc.vives.lan",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "irc.vives.lan",
@@ -117,7 +117,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":irc.vives.lan 376 test :End of MOTD command\r\n",
 		rawPrefix:  "irc.vives.lan",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "irc.vives.lan",
@@ -129,7 +129,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":irc.vives.lan 250 test :Highest connection count: 1 (1 connections received)\r\n",
 		rawPrefix:  "irc.vives.lan",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "sorcix",
@@ -143,7 +143,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org PRIVMSG #viveslan :\001ACTION is testing CTCP messages!\001\r\n",
 		rawPrefix:  "sorcix!~sorcix@sorcix.users.quakenet.org",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "sorcix",
@@ -157,7 +157,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org NOTICE midnightfox :\001PONG 1234567890\001\r\n",
 		rawPrefix:  "sorcix!~sorcix@sorcix.users.quakenet.org",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "a",
@@ -169,7 +169,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":a!b@c QUIT\r\n",
 		rawPrefix:  "a!b@c",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "a",
@@ -181,7 +181,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":a!b PRIVMSG :message\r\n",
 		rawPrefix:  "a!b",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "a",
@@ -193,7 +193,7 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":a@c NOTICE ::::Hey!\r\n",
 		rawPrefix:  "a@c",
 	},
-	&messageTest{
+	{
 		parsed: &Message{
 			Prefix: &Prefix{
 				Name: "nick",
