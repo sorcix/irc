@@ -108,3 +108,17 @@ func (enc *Encoder) Encode(m *Message) error {
 	}
 	return nil
 }
+
+// Write writes len(p) bytes from p to the underlying data stream.
+//
+// This method can be used simultaneously from multiple goroutines,
+// it guarantees to serialize access. The same lock is shared with the
+// Encode method.
+func (enc *Encoder) Write(p []byte) (n int, err error) {
+
+	enc.mu.Lock()
+	defer enc.mu.Unlock()
+
+	return enc.writer.Write(p)
+
+}
