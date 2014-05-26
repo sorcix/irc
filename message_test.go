@@ -12,7 +12,7 @@ type messageTest struct {
 	paramLen   int
 }
 
-var messageTests = [16]*messageTest{
+var messageTests = [...]*messageTest{
 	{
 		parsed: &Message{
 			Prefix: &Prefix{
@@ -205,6 +205,22 @@ var messageTests = [16]*messageTest{
 		rawMessage: ":nick PRIVMSG $@ :This message contains a\ttab!\r\n",
 		rawPrefix:  "nick",
 	},
+	{
+		parsed: &Message{
+			Command:  "TEST",
+			Params:   []string{"$@", "", "param"},
+			Trailing: "Trailing",
+		},
+		rawMessage: "TEST $@  param :Trailing\r\n",
+	},
+	{
+		rawMessage: ": PRIVMSG test :Invalid message with empty prefix.\r\n",
+		rawPrefix:  "",
+	},
+	{
+		rawMessage: ":  PRIVMSG test :Invalid message with space prefix\r\n",
+		rawPrefix:  " ",
+	},
 }
 
 // -----
@@ -217,7 +233,7 @@ func TestPrefix_String(t *testing.T) {
 	for i, test := range messageTests {
 
 		// Skip tests that have no prefix
-		if test.parsed.Prefix == nil {
+		if test.parsed == nil || test.parsed.Prefix == nil {
 			continue
 		}
 
@@ -239,7 +255,7 @@ func TestPrefix_Len(t *testing.T) {
 	for i, test := range messageTests {
 
 		// Skip tests that have no prefix
-		if test.parsed.Prefix == nil {
+		if test.parsed == nil || test.parsed.Prefix == nil {
 			continue
 		}
 
@@ -260,7 +276,7 @@ func TestParsePrefix(t *testing.T) {
 	for i, test := range messageTests {
 
 		// Skip tests that have no prefix
-		if test.parsed.Prefix == nil {
+		if test.parsed == nil || test.parsed.Prefix == nil {
 			continue
 		}
 
@@ -285,6 +301,11 @@ func TestMessage_String(t *testing.T) {
 
 	for i, test := range messageTests {
 
+		// Skip tests that have no valid struct
+		if test.parsed == nil {
+			continue
+		}
+
 		// Convert the prefix
 		s = test.parsed.String()
 
@@ -301,6 +322,11 @@ func TestMessage_Len(t *testing.T) {
 	var l int
 
 	for i, test := range messageTests {
+
+		// Skip tests that have no valid struct
+		if test.parsed == nil {
+			continue
+		}
 
 		l = test.parsed.Len()
 
@@ -323,7 +349,7 @@ func TestParseMessage(t *testing.T) {
 
 		// Result struct should be the same as the value in parsed.
 		if !reflect.DeepEqual(p, test.parsed) {
-			t.Errorf("Failed to parse prefix %d:", i)
+			t.Errorf("Failed to parse message %d:", i)
 			t.Logf("Output: %#v", p)
 			t.Logf("Expected: %#v", test.parsed)
 		}
