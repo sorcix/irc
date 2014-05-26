@@ -126,13 +126,14 @@ type Message struct {
 // Returns nil if the Message is invalid.
 func ParseMessage(raw string) (m *Message) {
 
-	i, j := 0, 0
-	m = new(Message)
-
 	// Ignore empty messages.
 	if raw = strings.Trim(raw, cutset); len(raw) < 2 {
 		return nil
 	}
+
+	i, j := 0, 0
+
+	m = new(Message)
 
 	if raw[0] == prefix {
 
