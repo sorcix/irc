@@ -7,6 +7,9 @@ import (
 	"sync"
 )
 
+// Messages are delimited with CR and LF line endings,
+// we're using the last one to split the stream. Both are removed
+// during message parsing.
 const delim byte = '\n'
 
 // A Conn represents an IRC network protocol connection.
