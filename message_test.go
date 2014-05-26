@@ -9,7 +9,8 @@ type messageTest struct {
 	parsed     *Message
 	rawMessage string
 	rawPrefix  string
-	paramLen   int
+	hostmask   bool // Is it very clear that the prefix is a hostname?
+	server     bool // Is the prefix a servername?
 }
 
 var messageTests = [...]*messageTest{
@@ -25,6 +26,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":syrk!kalt@millennium.stealth.net QUIT :Gone to have lunch",
 		rawPrefix:  "syrk!kalt@millennium.stealth.net",
+		hostmask:   true,
 	},
 	{
 		parsed: &Message{
@@ -37,6 +39,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":Trillian SQUIT cm22.eng.umd.edu :Server out of control",
 		rawPrefix:  "Trillian",
+		server:     true,
 	},
 	{
 		parsed: &Message{
@@ -50,6 +53,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
+		hostmask:   true,
 	},
 	{
 		parsed: &Message{
@@ -64,6 +68,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":WiZ!jto@tolsun.oulu.fi PART #playzone :I lost",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
+		hostmask:   true,
 	},
 	{
 		parsed: &Message{
@@ -77,6 +82,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":WiZ!jto@tolsun.oulu.fi MODE #eu-opers -l",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
+		hostmask:   true,
 	},
 	{
 		parsed: &Message{
@@ -104,6 +110,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":irc.vives.lan 251 test :There are 2 users and 0 services on 1 servers",
 		rawPrefix:  "irc.vives.lan",
+		server:     true,
 	},
 	{
 		parsed: &Message{
@@ -116,6 +123,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":irc.vives.lan 376 test :End of MOTD command",
 		rawPrefix:  "irc.vives.lan",
+		server:     true,
 	},
 	{
 		parsed: &Message{
@@ -128,6 +136,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":irc.vives.lan 250 test :Highest connection count: 1 (1 connections received)",
 		rawPrefix:  "irc.vives.lan",
+		server:     true,
 	},
 	{
 		parsed: &Message{
@@ -142,6 +151,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org PRIVMSG #viveslan :\001ACTION is testing CTCP messages!\001",
 		rawPrefix:  "sorcix!~sorcix@sorcix.users.quakenet.org",
+		hostmask:   true,
 	},
 	{
 		parsed: &Message{
@@ -156,6 +166,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org NOTICE midnightfox :\001PONG 1234567890\001",
 		rawPrefix:  "sorcix!~sorcix@sorcix.users.quakenet.org",
+		hostmask:   true,
 	},
 	{
 		parsed: &Message{
@@ -168,6 +179,7 @@ var messageTests = [...]*messageTest{
 		},
 		rawMessage: ":a!b@c QUIT",
 		rawPrefix:  "a!b@c",
+		hostmask:   true,
 	},
 	{
 		parsed: &Message{
@@ -226,6 +238,38 @@ var messageTests = [...]*messageTest{
 // -----
 // PREFIX
 // -----
+
+func TestPrefix_IsHostmask(t *testing.T) {
+
+	for i, test := range messageTests {
+
+		// Skip tests that have no prefix
+		if test.parsed == nil || test.parsed.Prefix == nil {
+			continue
+		}
+
+		if test.hostmask && !test.parsed.Prefix.IsHostmask() {
+			t.Errorf("Prefix %d should be recognized as a hostmask!", i)
+		}
+
+	}
+}
+
+func TestPrefix_IsServer(t *testing.T) {
+
+	for i, test := range messageTests {
+
+		// Skip tests that have no prefix
+		if test.parsed == nil || test.parsed.Prefix == nil {
+			continue
+		}
+
+		if test.server && !test.parsed.Prefix.IsServer() {
+			t.Errorf("Prefix %d should be recognized as a server!", i)
+		}
+
+	}
+}
 
 func TestPrefix_String(t *testing.T) {
 	var s string

@@ -85,6 +85,16 @@ func (p *Prefix) String() (s string) {
 	return
 }
 
+// IsHostmask returns true if this prefix looks like a user hostmask.
+func (p *Prefix) IsHostmask() bool {
+	return len(p.User) > 0 && len(p.Host) > 0
+}
+
+// IsServer returns true if this prefix looks like a server name.
+func (p *Prefix) IsServer() bool {
+	return len(p.User) <= 0 && len(p.Host) <= 0 // && strings.IndexByte(p.Name, '.') > 0
+}
+
 // writeTo is an utility function to write the prefix to the bytes.Buffer in Message.String().
 func (p *Prefix) writeTo(buffer *bytes.Buffer) {
 	buffer.WriteString(p.Name)
