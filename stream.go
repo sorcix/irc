@@ -52,7 +52,6 @@ func (c *Conn) Close() error {
 type Decoder struct {
 	reader *bufio.Reader
 	line   string
-	err    error
 	mu     sync.Mutex
 }
 
@@ -66,14 +65,14 @@ func NewDecoder(r io.Reader) *Decoder {
 // Decode attempts to read a single Message from the stream.
 //
 // Returns a non-nil error if the read failed.
-func (dec *Decoder) Decode() (*Message, error) {
+func (dec *Decoder) Decode() (m *Message, err error) {
 
 	dec.mu.Lock()
-	defer dec.mu.Unlock()
+	dec.line, err = dec.reader.ReadString(delim)
+	dec.mu.Unlock()
 
-	dec.line, dec.err = dec.reader.ReadString(delim)
-	if dec.err != nil {
-		return nil, dec.err
+	if err != nil {
+		return nil, err
 	}
 
 	return ParseMessage(dec.line), nil
@@ -82,7 +81,6 @@ func (dec *Decoder) Decode() (*Message, error) {
 // An Encoder writes Message objects to an output stream.
 type Encoder struct {
 	writer io.Writer
-	err    error
 	mu     sync.Mutex
 }
 
@@ -98,27 +96,23 @@ func NewEncoder(w io.Writer) *Encoder {
 // This method may be used from multiple goroutines.
 //
 // Returns an non-nil error if the write to the underlying stream stopped early.
-func (enc *Encoder) Encode(m *Message) error {
+func (enc *Encoder) Encode(m *Message) (err error) {
 
-	enc.mu.Lock()
-	defer enc.mu.Unlock()
+	_, err = enc.Write(m.Bytes())
 
-	if _, enc.err = enc.writer.Write(m.Bytes()); enc.err != nil {
-		return enc.err
-	}
-	return nil
+	return
 }
 
 // Write writes len(p) bytes from p to the underlying data stream.
 //
 // This method can be used simultaneously from multiple goroutines,
-// it guarantees to serialize access. The same lock is shared with the
-// Encode method.
+// it guarantees to serialize access. However, writing a single IRC message
+// using multiple Write calls can cause corruption.
 func (enc *Encoder) Write(p []byte) (n int, err error) {
 
 	enc.mu.Lock()
-	defer enc.mu.Unlock()
+	n, err = enc.writer.Write(p)
+	enc.mu.Unlock()
 
-	return enc.writer.Write(p)
-
+	return
 }
