@@ -12,7 +12,7 @@ const (
 	Voice        = '+' // User has voice +v
 )
 
-// IRC commands replies extracted from RFC2812 section 3.
+// IRC commands extracted from RFC2812 section 3.
 const (
 	PASS     = "PASS"
 	NICK     = "NICK"
@@ -200,4 +200,31 @@ const (
 	ERR_NOOPERHOST        = "491"
 	ERR_UMODEUNKNOWNFLAG  = "501"
 	ERR_USERSDONTMATCH    = "502"
+)
+
+// IRC commands extracted from the IRCv3 spec at http://www.ircv3.org/.
+const (
+	CAP       = "CAP"
+	CAP_LS    = "LS"    // Subcommand (param)
+	CAP_LIST  = "LIST"  // Subcommand (param)
+	CAP_REQ   = "REQ"   // Subcommand (param)
+	CAP_ACK   = "ACK"   // Subcommand (param)
+	CAP_NAK   = "NAK"   // Subcommand (param)
+	CAP_CLEAR = "CLEAR" // Subcommand (param)
+	CAP_END   = "END"   // Subcommand (param)
+
+	AUTHENTICATE = "AUTHENTICATE"
+)
+
+// Numeric IRC replies extracted from the IRCv3 spec.
+const (
+	RPL_LOGGEDIN    = "900"
+	RPL_LOGGEDOUT   = "901"
+	RPL_NICKLOCKED  = "902"
+	RPL_SASLSUCCESS = "903"
+	ERR_SASLFAIL    = "904"
+	ERR_SASLTOOLONG = "905"
+	ERR_SASLABORTED = "906"
+	ERR_SASLALREADY = "907"
+	RPL_SASLMECHS   = "908"
 )
