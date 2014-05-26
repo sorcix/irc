@@ -14,7 +14,7 @@ const (
 
 	cutset string = "\r\n\x20\x00" // Characters to trim from prefixes/messages.
 
-	maxLength = 512
+	maxLength = 510 // Maximum length is 512 - 2 for the line endings.
 )
 
 // Prefix represents the prefix (sender) of an IRC message.
@@ -246,7 +246,7 @@ func (m *Message) Bytes() []byte {
 		buffer.WriteString(m.Trailing)
 	}
 
-	// We need the limit the buffer to 512 bytes.
+	// We need the limit the buffer length.
 	if buffer.Len() > (maxLength) {
 		buffer.Truncate(maxLength)
 	}
