@@ -12,11 +12,8 @@ const (
 	prefixHost byte = 0x40 // Hostname
 	space      byte = 0x20 // Separator
 
-	endline string = "\r\n" // Line endings for IRC messages.
-
-	cutset string = "\r\n\x20\x00" // Characters to trim from prefixes/messages.
-
-	empty = "" // The empty string.
+	endline string = "\r\n"         // Line endings for IRC messages.
+	cutset  string = "\r\n\x20\x00" // Characters to trim from prefixes/messages.
 
 	maxLength = 512
 )
