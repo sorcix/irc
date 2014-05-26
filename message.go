@@ -33,8 +33,6 @@ type Prefix struct {
 }
 
 // ParsePrefix takes a string and attempts to create a Prefix struct.
-//
-// Returns nil if the prefix is invalid.
 func ParsePrefix(raw string) (p *Prefix) {
 
 	p = new(Prefix)
