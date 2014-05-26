@@ -23,7 +23,7 @@ var messageTests = [...]*messageTest{
 			Command:  "QUIT",
 			Trailing: "Gone to have lunch",
 		},
-		rawMessage: ":syrk!kalt@millennium.stealth.net QUIT :Gone to have lunch\r\n",
+		rawMessage: ":syrk!kalt@millennium.stealth.net QUIT :Gone to have lunch",
 		rawPrefix:  "syrk!kalt@millennium.stealth.net",
 	},
 	{
@@ -35,7 +35,7 @@ var messageTests = [...]*messageTest{
 			Params:   []string{"cm22.eng.umd.edu"},
 			Trailing: "Server out of control",
 		},
-		rawMessage: ":Trillian SQUIT cm22.eng.umd.edu :Server out of control\r\n",
+		rawMessage: ":Trillian SQUIT cm22.eng.umd.edu :Server out of control",
 		rawPrefix:  "Trillian",
 	},
 	{
@@ -48,7 +48,7 @@ var messageTests = [...]*messageTest{
 			Command: "JOIN",
 			Params:  []string{"#Twilight_zone"},
 		},
-		rawMessage: ":WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone\r\n",
+		rawMessage: ":WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
 	},
 	{
@@ -62,7 +62,7 @@ var messageTests = [...]*messageTest{
 			Params:   []string{"#playzone"},
 			Trailing: "I lost",
 		},
-		rawMessage: ":WiZ!jto@tolsun.oulu.fi PART #playzone :I lost\r\n",
+		rawMessage: ":WiZ!jto@tolsun.oulu.fi PART #playzone :I lost",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
 	},
 	{
@@ -75,7 +75,7 @@ var messageTests = [...]*messageTest{
 			Command: "MODE",
 			Params:  []string{"#eu-opers", "-l"},
 		},
-		rawMessage: ":WiZ!jto@tolsun.oulu.fi MODE #eu-opers -l\r\n",
+		rawMessage: ":WiZ!jto@tolsun.oulu.fi MODE #eu-opers -l",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
 	},
 	{
@@ -83,7 +83,7 @@ var messageTests = [...]*messageTest{
 			Command: "MODE",
 			Params:  []string{"&oulu", "+b", "*!*@*.edu", "+e", "*!*@*.bu.edu"},
 		},
-		rawMessage: "MODE &oulu +b *!*@*.edu +e *!*@*.bu.edu\r\n",
+		rawMessage: "MODE &oulu +b *!*@*.edu +e *!*@*.bu.edu",
 	},
 	{
 		parsed: &Message{
@@ -91,7 +91,7 @@ var messageTests = [...]*messageTest{
 			Params:   []string{"#channel"},
 			Trailing: "Message with :colons!",
 		},
-		rawMessage: "PRIVMSG #channel :Message with :colons!\r\n",
+		rawMessage: "PRIVMSG #channel :Message with :colons!",
 	},
 	{
 		parsed: &Message{
@@ -102,7 +102,7 @@ var messageTests = [...]*messageTest{
 			Params:   []string{"test"},
 			Trailing: "There are 2 users and 0 services on 1 servers",
 		},
-		rawMessage: ":irc.vives.lan 251 test :There are 2 users and 0 services on 1 servers\r\n",
+		rawMessage: ":irc.vives.lan 251 test :There are 2 users and 0 services on 1 servers",
 		rawPrefix:  "irc.vives.lan",
 	},
 	{
@@ -114,7 +114,7 @@ var messageTests = [...]*messageTest{
 			Params:   []string{"test"},
 			Trailing: "End of MOTD command",
 		},
-		rawMessage: ":irc.vives.lan 376 test :End of MOTD command\r\n",
+		rawMessage: ":irc.vives.lan 376 test :End of MOTD command",
 		rawPrefix:  "irc.vives.lan",
 	},
 	{
@@ -126,7 +126,7 @@ var messageTests = [...]*messageTest{
 			Params:   []string{"test"},
 			Trailing: "Highest connection count: 1 (1 connections received)",
 		},
-		rawMessage: ":irc.vives.lan 250 test :Highest connection count: 1 (1 connections received)\r\n",
+		rawMessage: ":irc.vives.lan 250 test :Highest connection count: 1 (1 connections received)",
 		rawPrefix:  "irc.vives.lan",
 	},
 	{
@@ -140,7 +140,7 @@ var messageTests = [...]*messageTest{
 			Params:   []string{"#viveslan"},
 			Trailing: "\001ACTION is testing CTCP messages!\001",
 		},
-		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org PRIVMSG #viveslan :\001ACTION is testing CTCP messages!\001\r\n",
+		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org PRIVMSG #viveslan :\001ACTION is testing CTCP messages!\001",
 		rawPrefix:  "sorcix!~sorcix@sorcix.users.quakenet.org",
 	},
 	{
@@ -154,7 +154,7 @@ var messageTests = [...]*messageTest{
 			Params:   []string{"midnightfox"},
 			Trailing: "\001PONG 1234567890\001",
 		},
-		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org NOTICE midnightfox :\001PONG 1234567890\001\r\n",
+		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org NOTICE midnightfox :\001PONG 1234567890\001",
 		rawPrefix:  "sorcix!~sorcix@sorcix.users.quakenet.org",
 	},
 	{
@@ -166,7 +166,7 @@ var messageTests = [...]*messageTest{
 			},
 			Command: "QUIT",
 		},
-		rawMessage: ":a!b@c QUIT\r\n",
+		rawMessage: ":a!b@c QUIT",
 		rawPrefix:  "a!b@c",
 	},
 	{
@@ -178,7 +178,7 @@ var messageTests = [...]*messageTest{
 			Command:  "PRIVMSG",
 			Trailing: "message",
 		},
-		rawMessage: ":a!b PRIVMSG :message\r\n",
+		rawMessage: ":a!b PRIVMSG :message",
 		rawPrefix:  "a!b",
 	},
 	{
@@ -190,7 +190,7 @@ var messageTests = [...]*messageTest{
 			Command:  "NOTICE",
 			Trailing: ":::Hey!",
 		},
-		rawMessage: ":a@c NOTICE ::::Hey!\r\n",
+		rawMessage: ":a@c NOTICE ::::Hey!",
 		rawPrefix:  "a@c",
 	},
 	{
@@ -202,7 +202,7 @@ var messageTests = [...]*messageTest{
 			Params:   []string{"$@"},
 			Trailing: "This message contains a\ttab!",
 		},
-		rawMessage: ":nick PRIVMSG $@ :This message contains a\ttab!\r\n",
+		rawMessage: ":nick PRIVMSG $@ :This message contains a\ttab!",
 		rawPrefix:  "nick",
 	},
 	{
@@ -211,14 +211,14 @@ var messageTests = [...]*messageTest{
 			Params:   []string{"$@", "", "param"},
 			Trailing: "Trailing",
 		},
-		rawMessage: "TEST $@  param :Trailing\r\n",
+		rawMessage: "TEST $@  param :Trailing",
 	},
 	{
-		rawMessage: ": PRIVMSG test :Invalid message with empty prefix.\r\n",
+		rawMessage: ": PRIVMSG test :Invalid message with empty prefix.",
 		rawPrefix:  "",
 	},
 	{
-		rawMessage: ":  PRIVMSG test :Invalid message with space prefix\r\n",
+		rawMessage: ":  PRIVMSG test :Invalid message with space prefix",
 		rawPrefix:  " ",
 	},
 }

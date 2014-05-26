@@ -12,8 +12,7 @@ const (
 	prefixHost byte = 0x40 // Hostname
 	space      byte = 0x20 // Separator
 
-	endline string = "\r\n"         // Line endings for IRC messages.
-	cutset  string = "\r\n\x20\x00" // Characters to trim from prefixes/messages.
+	cutset string = "\r\n\x20\x00" // Characters to trim from prefixes/messages.
 
 	maxLength = 512
 )
@@ -200,7 +199,7 @@ func (m *Message) Len() (length int) {
 		length = m.Prefix.Len() + 2 // Include prefix and trailing space
 	}
 
-	length = length + len(m.Command) + 2 // Include line endings
+	length = length + len(m.Command)
 
 	if len(m.Params) > 0 {
 		length = length + len(m.Params)
@@ -247,12 +246,10 @@ func (m *Message) Bytes() []byte {
 		buffer.WriteString(m.Trailing)
 	}
 
-	// We need the limit the buffer to 510 bytes as the line ending takes 2 more.
-	if buffer.Len() > (maxLength - 2) {
-		buffer.Truncate(maxLength - 2)
+	// We need the limit the buffer to 512 bytes.
+	if buffer.Len() > (maxLength) {
+		buffer.Truncate(maxLength)
 	}
-
-	buffer.WriteString(endline)
 
 	return buffer.Bytes()
 }

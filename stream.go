@@ -12,6 +12,8 @@ import (
 // during message parsing.
 const delim byte = '\n'
 
+var endline = []byte("\r\n")
+
 // A Conn represents an IRC network protocol connection.
 // It consists of an Encoder and Decoder to manage I/O.
 type Conn struct {
@@ -110,11 +112,20 @@ func (enc *Encoder) Encode(m *Message) (err error) {
 //
 // This method can be used simultaneously from multiple goroutines,
 // it guarantees to serialize access. However, writing a single IRC message
-// using multiple Write calls can cause corruption.
+// using multiple Write calls will cause corruption.
+//
+// The required line endings (CR+LF) are added automatically.
 func (enc *Encoder) Write(p []byte) (n int, err error) {
 
 	enc.mu.Lock()
 	n, err = enc.writer.Write(p)
+
+	if err != nil {
+		enc.mu.Unlock()
+		return
+	}
+
+	_, err = enc.writer.Write(endline)
 	enc.mu.Unlock()
 
 	return
