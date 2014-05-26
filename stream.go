@@ -43,11 +43,6 @@ func Dial(addr string) (*Conn, error) {
 	return NewConn(c), nil
 }
 
-// Send is an alias for Encode and implements the Sender interface.
-func (c *Conn) Send(m *Message) error {
-	return c.Encoder.Encode(m)
-}
-
 // Close closes the underlying ReadWriteCloser.
 func (c *Conn) Close() error {
 	return c.conn.Close()

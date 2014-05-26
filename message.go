@@ -21,16 +21,6 @@ const (
 	maxLength = 512
 )
 
-// An object that implements Handler is able to process IRC messages.
-type Handler interface {
-	Handle(*Message, Sender)
-}
-
-// An object that implements Sender is able to send IRC messages.
-type Sender interface {
-	Send(*Message) error
-}
-
 // Prefix represents the prefix (sender) of an IRC message.
 // See RFC1459 section 2.3.1.
 //
