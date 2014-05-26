@@ -108,13 +108,11 @@ func (enc *Encoder) Encode(m *Message) (err error) {
 	return
 }
 
-// Write writes len(p) bytes from p to the underlying data stream.
+// Write writes len(p) bytes from p followed by CR+LF.
 //
 // This method can be used simultaneously from multiple goroutines,
 // it guarantees to serialize access. However, writing a single IRC message
 // using multiple Write calls will cause corruption.
-//
-// The required line endings (CR+LF) are added automatically.
 func (enc *Encoder) Write(p []byte) (n int, err error) {
 
 	enc.mu.Lock()
