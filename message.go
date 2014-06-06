@@ -33,7 +33,7 @@ type Sender interface {
 // Prefix represents the prefix (sender) of an IRC message.
 // See RFC1459 section 2.3.1.
 //
-//	<servername> | <nick> [ '!' <user> ] [ '@' <host> ]
+//    <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
 //
 type Prefix struct {
 	Name string // Nick- or servername
@@ -125,18 +125,18 @@ func (p *Prefix) writeTo(buffer *bytes.Buffer) {
 // Message represents an IRC protocol message.
 // See RFC1459 section 2.3.1.
 //
-//	 <message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
-//	 <prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
-//	 <command>  ::= <letter> { <letter> } | <number> <number> <number>
-//	 <SPACE>    ::= ' ' { ' ' }
-//	 <params>   ::= <SPACE> [ ':' <trailing> | <middle> <params> ]
+//    <message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
+//    <prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
+//    <command>  ::= <letter> { <letter> } | <number> <number> <number>
+//    <SPACE>    ::= ' ' { ' ' }
+//    <params>   ::= <SPACE> [ ':' <trailing> | <middle> <params> ]
 //
-//	 <middle>   ::= <Any *non-empty* sequence of octets not including SPACE
-//	                or NUL or CR or LF, the first of which may not be ':'>
-//	 <trailing> ::= <Any, possibly *empty*, sequence of octets not including
-//	                 NUL or CR or LF>
+//    <middle>   ::= <Any *non-empty* sequence of octets not including SPACE
+//                   or NUL or CR or LF, the first of which may not be ':'>
+//    <trailing> ::= <Any, possibly *empty*, sequence of octets not including
+//                   NUL or CR or LF>
 //
-//	 <crlf>     ::= CR LF
+//    <crlf>     ::= CR LF
 type Message struct {
 	*Prefix
 	Command  string

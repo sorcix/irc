@@ -2,7 +2,7 @@
 //
 // Use of this source code is governed by the MIT license.
 
-// Package irc provides tools for communicating with IRC servers.
+// Package irc allows your application to speak the IRC protocol.
 //
 // The Message and Prefix structs provide translation to and from raw IRC messages:
 //
@@ -25,5 +25,12 @@
 //
 //    // Send a message to the writer.
 //    enc.Encode(message)
+//
+// The Conn type combines an Encoder and Decoder for a duplex connection.
+//
+//    c, err := irc.Dial("irc.server.net:6667")
+//
+//    // Methods from both Encoder and Decoder are available
+//    message, err := c.Decode()
 //
 package irc
