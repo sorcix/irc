@@ -1,28 +1,22 @@
-Go IRC library
-===============
+# Go **irc** package
+---
+
+[Package Documentation][Documentation] @ godoc.org
 
 [![Build Status](https://drone.io/github.com/sorcix/irc/status.png)](https://drone.io/github.com/sorcix/irc/latest)
 
-[Message]: http://godoc.org/github.com/sorcix/irc#Message "Message type documentation"
-[Encoder]: http://godoc.org/github.com/sorcix/irc#Encoder "Encoder type documentation"
-[Decoder]: http://godoc.org/github.com/sorcix/irc#Decoder "Decoder type documentation"
-[Prefix]: http://godoc.org/github.com/sorcix/irc#Prefix "Prefix type documentation"
-[RFC1459]: http://tools.ietf.org/html/rfc1459.html "RFC 1459"
-[JSON]: http://golang.org/pkg/encoding/json/ "Package encoding/json in the standard library"
+## Features
+Package irc allows your application to speak the IRC protocol.
 
-This minimalistic Go IRC library provides helpers for IRC connectivity.
+ - **Limited scope**, does one thing and does it well.
+ - Focus on simplicity and **speed**.
+ - **Stable API**: updates shouldn't break existing software.
+ - Well [documented][Documentation] code.
 
-**This library does not abstract away the IRC protocol from your application, knowledge of the IRC protocol is required!** Most of the time, I need to implement only parts of the IRC protocol, and most other IRC libraries are overkill. The aim of this project is to provide a package similar to the official [net/http](http://golang.org/pkg/net/http/ "HTTP") package, providing you with the basics *required for every IRC client and server*.
+*This package does not manage your entire IRC connection. It only translates the protocol to easy to use Go types. It is meant as a single component in a larger IRC library, or for basic IRC bots for which a large IRC package would be overkill.*
 
-If you want something up and running very fast, this isn't for you. If you prefer minimal code and fast execution times, **keep reading**!
-
-[Documentation by Godoc.org](http://godoc.org/github.com/sorcix/irc "Documentation")
-
-    go get github.com/sorcix/irc
-
-Message
---------
-The [Message][] and [Prefix][] types provide translation to and from raw IRC messages, as described in [RFC1459][] (section 2.3.1).
+### Message
+The [Message][] and [Prefix][] types provide translation to and from IRC message format.
 
     // Parse the IRC-encoded data and stores the result in a new struct.
     message := irc.ParseMessage(raw)
@@ -30,9 +24,8 @@ The [Message][] and [Prefix][] types provide translation to and from raw IRC mes
     // Returns the IRC encoding of the message.
     raw = message.String()
 
-Encoder & Decoder
------------------
-Similar to the types found in [encoding/json][JSON], the [Encoder][] type translates a [Message][] and writes it to a stream. The [Decoder][] type allows you to read [Message][]s from a stream, one by one.
+### Encoder & Decoder
+The [Encoder][] and [Decoder][] types allow working with IRC message streams.
 
     // Create a decoder that reads from given io.Reader
     dec := irc.NewDecoder(reader)
@@ -45,3 +38,26 @@ Similar to the types found in [encoding/json][JSON], the [Encoder][] type transl
 
     // Send a message to the writer.
     enc.Encode(message)
+
+### Conn
+The [Conn][] type combines an [Encoder][] and [Decoder][] for a duplex connection.
+
+    c, err := irc.Dial("irc.server.net:6667")
+
+    // Methods from both Encoder and Decoder are available
+    message, err := c.Decode()
+
+## Future plans
+
+ - Basic event-based client, in a separate package.
+ - Support for IRCv3 message tags.
+ - Example code
+
+
+[Documentation]: https://godoc.org/github.com/sorcix/irc "Package documentation by Godoc.org"
+[Message]: http://godoc.org/github.com/sorcix/irc#Message "Message type documentation"
+[Prefix]: http://godoc.org/github.com/sorcix/irc#Prefix "Prefix type documentation"
+[Encoder]: http://godoc.org/github.com/sorcix/irc#Encoder "Encoder type documentation"
+[Decoder]: http://godoc.org/github.com/sorcix/irc#Decoder "Decoder type documentation"
+[Conn]: http://godoc.org/github.com/sorcix/irc#Conn "Conn type documentation"
+[RFC1459]: http://tools.ietf.org/html/rfc1459.html "RFC 1459"
