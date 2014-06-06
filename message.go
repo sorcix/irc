@@ -17,6 +17,15 @@ const (
 	maxLength = 510 // Maximum length is 512 - 2 for the line endings.
 )
 
+// Objects implementing the Sender interface are able to send messages to an IRC server.
+//
+// As there might be a message queue, it is possible that Send returns a nil
+// error, but the message is not sent (yet). The error value is only used when
+// it is certain that sending the message is impossible.
+type Sender interface {
+	Send(*Message) error
+}
+
 // Prefix represents the prefix (sender) of an IRC message.
 // See RFC1459 section 2.3.1.
 //
