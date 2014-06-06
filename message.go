@@ -157,7 +157,7 @@ func ParseMessage(raw string) (m *Message) {
 		m.Prefix = ParsePrefix(raw[1:i])
 
 		// Skip space at the end of the prefix
-		i = i + 1
+		i++
 	}
 
 	// Find end of command
@@ -174,7 +174,7 @@ func ParseMessage(raw string) (m *Message) {
 	}
 
 	// Skip space after command
-	j = j + 1
+	j++
 
 	// Find prefix for trailer
 	i = strings.IndexByte(raw[j:], prefix)
