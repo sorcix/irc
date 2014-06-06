@@ -1,5 +1,4 @@
 # Go **irc** package
----
 
 [Package Documentation][Documentation] @ godoc.org
 
