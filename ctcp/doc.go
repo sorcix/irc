@@ -1,3 +1,7 @@
+// Copyright 2014 Vic Demuzere
+//
+// Use of this source code is governed by the MIT license.
+
 // Package ctcp implements partial support for the Client-to-Client Protocol.
 //
 // CTCP defines extended messages using the standard PRIVMSG and NOTICE
@@ -11,17 +15,17 @@
 //
 // Example using the irc.Message type:
 //
-//	m := irc.ParseMessage(...)
+//    m := irc.ParseMessage(...)
 //
-//	if tag, text, ok := ctcp.Decode(m.Trailing); ok {
-//		// This is a CTCP message.
-//	} else {
-//		// This is not a CTCP message.
-//	}
+//    if tag, text, ok := ctcp.Decode(m.Trailing); ok {
+//        // This is a CTCP message.
+//    } else {
+//        // This is not a CTCP message.
+//    }
 //
 // Similar, for encoding messages:
 //
-//	m.Trailing = ctcp.Encode("ACTION","wants a cookie!")
+//    m.Trailing = ctcp.Encode("ACTION","wants a cookie!")
 //
 // Do not send a complete IRC message to Decode, it won't work.
 package ctcp

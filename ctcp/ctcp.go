@@ -1,3 +1,7 @@
+// Copyright 2014 Vic Demuzere
+//
+// Use of this source code is governed by the MIT license.
+
 package ctcp
 
 // Sources:
@@ -39,8 +43,8 @@ const (
 //
 // If the message text does not contain tagged data, ok will be false.
 //
-//	<text>  ::= <delim> <tag> [<SPACE> <message>] <delim>
-//	<delim> ::= 0x01
+//    <text>  ::= <delim> <tag> [<SPACE> <message>] <delim>
+//    <delim> ::= 0x01
 //
 func Decode(text string) (tag, message string, ok bool) {
 
@@ -62,8 +66,8 @@ func Decode(text string) (tag, message string, ok bool) {
 
 // Encode returns the IRC message text for CTCP tagged data.
 //
-//	<text>  ::= <delim> <tag> [<SPACE> <message>] <delim>
-//	<delim> ::= 0x01
+//    <text>  ::= <delim> <tag> [<SPACE> <message>] <delim>
+//    <delim> ::= 0x01
 //
 func Encode(tag, message string) (text string) {
 
