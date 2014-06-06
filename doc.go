@@ -1,3 +1,7 @@
+// Copyright 2014 Vic Demuzere
+//
+// Use of this source code is governed by the MIT license.
+
 // Package irc provides tools for communicating with IRC servers.
 //
 // The Message and Prefix structs provide translation to and from raw IRC messages:

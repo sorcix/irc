@@ -1,3 +1,7 @@
+// Copyright 2014 Vic Demuzere
+//
+// Use of this source code is governed by the MIT license.
+
 package irc
 
 // Various prefixes extracted from RFC1459.
