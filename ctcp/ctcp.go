@@ -23,7 +23,7 @@ const (
 	empty = "" // The empty string
 
 	timeFormat    = time.RFC1123Z
-	versionFormat = "Go %s (%s, %s)"
+	versionFormat = "Go v%s (" + runtime.GOOS + ", " + runtime.GOARCH + ")"
 )
 
 // Tags extracted from the CTCP spec.
@@ -105,7 +105,7 @@ func Version(message string) string {
 
 // VersionReply is a shortcut for ENCODE(ctcp.VERSION, go version info).
 func VersionReply() string {
-	return Encode(VERSION, fmt.Sprintf(versionFormat, runtime.Version(), runtime.GOOS, runtime.GOARCH))
+	return Encode(VERSION, fmt.Sprintf(versionFormat, runtime.Version()))
 }
 
 // UserInfo is a shortcut for Encode(ctcp.USERINFO, message).
