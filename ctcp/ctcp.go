@@ -72,14 +72,19 @@ func Decode(text string) (tag, message string, ok bool) {
 func Encode(tag, message string) (text string) {
 
 	switch {
+
+	// We can't build a valid CTCP tagged message without at least a tag.
 	case len(tag) <= 0:
 		return empty
 
+	// Tagged data with a message
 	case len(message) > 0:
 		return string(delimiter) + tag + string(space) + message + string(delimiter)
 
+	// Tagged data without a message
 	default:
 		return string(delimiter) + tag + string(delimiter)
+
 	}
 }
 
