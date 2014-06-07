@@ -58,10 +58,10 @@ func Decode(text string) (tag, message string, ok bool) {
 	if s < 0 {
 
 		// Messages may contain only a tag.
-		return text[1 : len(text)-2], empty, true
+		return text[1 : len(text)-1], empty, true
 	}
 
-	return text[1:s], text[s+1 : len(text)-2], true
+	return text[1:s], text[s+1 : len(text)-1], true
 }
 
 // Encode returns the IRC message text for CTCP tagged data.
