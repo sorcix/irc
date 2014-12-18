@@ -16,6 +16,27 @@ const (
 	Voice        = '+' // User has voice +v
 )
 
+// User modes as defined by RFC1459 section 4.2.3.2.
+const (
+	UserModeInvisible     = 'i' // User is invisible
+	UserModeServerNotices = 's' // User wants to receive server notices
+	UserModeWallops       = 'w' // User wants to receive Wallops
+	UserModeOperator      = 'o' // Server operator
+)
+
+// Channel modes as defined by RFC1459 section 4.2.3.1
+const (
+	ModeOperator   = 'o' // Operator privileges
+	ModeVoice      = 'v' // Ability to speak on a moderated channel
+	ModePrivate    = 'p' // Private channel
+	ModeSecret     = 's' // Secret channel
+	ModeInviteOnly = 'i' // Users can't join without invite
+	ModeTopic      = 't' // Topic can only be set by an operator
+	ModeModerated  = 'm' // Only voiced users and operators can talk
+	ModeLimit      = 'l' // User limit
+	ModeKey        = 'k' // Channel password
+)
+
 // IRC commands extracted from RFC2812 section 3.
 const (
 	PASS     = "PASS"
