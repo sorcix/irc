@@ -26,6 +26,9 @@ const (
 // As there might be a message queue, it is possible that Send returns a nil
 // error, but the message is not sent (yet). The error value is only used when
 // it is certain that sending the message is impossible.
+//
+// This interface is not used inside this package, and shouldn't have been
+// defined here in the first place. For backwards compatibility only.
 type Sender interface {
 	Send(*Message) error
 }
