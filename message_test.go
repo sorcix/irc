@@ -9,15 +9,13 @@ import (
 	"testing"
 )
 
-type messageTest struct {
+var messageTests = [...]*struct {
 	parsed     *Message
 	rawMessage string
 	rawPrefix  string
 	hostmask   bool // Is it very clear that the prefix is a hostname?
 	server     bool // Is the prefix a servername?
-}
-
-var messageTests = [...]*messageTest{
+}{
 	{
 		parsed: &Message{
 			Prefix: &Prefix{
