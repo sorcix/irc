@@ -235,6 +235,25 @@ var messageTests = [...]*struct {
 		rawMessage: ":  PRIVMSG test :Invalid message with space prefix",
 		rawPrefix:  " ",
 	},
+	{
+		parsed: &Message{
+			Command:       "TOPIC",
+			Params:        []string{"#foo"},
+			Trailing:      "",
+		},
+		rawMessage: "TOPIC #foo",
+		rawPrefix:  "",
+	},
+	{
+		parsed: &Message{
+			Command:       "TOPIC",
+			Params:        []string{"#foo"},
+			Trailing:      "",
+			EmptyTrailing: true,
+		},
+		rawMessage: "TOPIC #foo :",
+		rawPrefix:  "",
+	},
 }
 
 // -----

@@ -145,6 +145,9 @@ type Message struct {
 	Command  string
 	Params   []string
 	Trailing string
+
+	// When set to true, the trailing prefix (:) will be added even if the trailing message is empty.
+	EmptyTrailing bool
 }
 
 // ParseMessage takes a string and attempts to create a Message struct.
@@ -214,6 +217,11 @@ func ParseMessage(raw string) (m *Message) {
 
 	m.Trailing = raw[i+1:]
 
+	// We need to re-encode the trailing argument even if it was empty.
+	if len(m.Trailing) <= 0 {
+		m.EmptyTrailing = true
+	}
+
 	return m
 
 }
@@ -234,7 +242,7 @@ func (m *Message) Len() (length int) {
 		}
 	}
 
-	if len(m.Trailing) > 0 {
+	if len(m.Trailing) > 0 || m.EmptyTrailing {
 		length = length + len(m.Trailing) + 2 // Include prefix and space
 	}
 
@@ -266,7 +274,7 @@ func (m *Message) Bytes() []byte {
 		buffer.WriteString(strings.Join(m.Params, string(space)))
 	}
 
-	if len(m.Trailing) > 0 {
+	if len(m.Trailing) > 0 || m.EmptyTrailing {
 		buffer.WriteByte(space)
 		buffer.WriteByte(prefix)
 		buffer.WriteString(m.Trailing)
