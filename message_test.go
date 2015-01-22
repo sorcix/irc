@@ -422,6 +422,34 @@ func TestParseMessage(t *testing.T) {
 }
 
 // -----
+// MESSAGE DECODE -> ENCODE
+// -----
+
+func TestMessageDecodeEncode(t *testing.T) {
+	var (
+		p *Message
+		s string
+	)
+
+	for i, test := range messageTests {
+
+		// Skip invalid messages
+		if test.parsed == nil {
+			continue
+		}
+
+		// Decode the message, then encode it again.
+		p = ParseMessage(test.rawMessage)
+		s = p.String()
+
+		// Result struct should be the same as the original.
+		if s != test.rawMessage {
+			t.Errorf("Message %d failed decode-encode sequence!", i)
+		}
+	}
+}
+
+// -----
 // BENCHMARK
 // -----
 
