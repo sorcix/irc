@@ -237,9 +237,9 @@ var messageTests = [...]*struct {
 	},
 	{
 		parsed: &Message{
-			Command:       "TOPIC",
-			Params:        []string{"#foo"},
-			Trailing:      "",
+			Command:  "TOPIC",
+			Params:   []string{"#foo"},
+			Trailing: "",
 		},
 		rawMessage: "TOPIC #foo",
 		rawPrefix:  "",
