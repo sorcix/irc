@@ -46,11 +46,21 @@ The [Conn][] type combines an [Encoder][] and [Decoder][] for a duplex connectio
     // Methods from both Encoder and Decoder are available
     message, err := c.Decode()
 
-## Future plans
+## Examples
+Check these other projects for an example on how to use the package:
 
- - Basic event-based client, in a separate package.
- - Support for IRCv3 message tags.
- - Example code
+Clients:
+
+ - https://github.com/nickvanw/ircx (great simple example)
+ - https://github.com/FSX/jun
+ - https://github.com/jnwhiteh/wallops
+ - https://github.com/Alligator/gomero
+ - https://github.com/msparks/iq
+ - https://github.com/TheCreeper/HackBot
+
+Servers:
+
+ - https://github.com/nightexcessive/excessiveircd
 
 
 [Documentation]: https://godoc.org/github.com/sorcix/irc "Package documentation by Godoc.org"
