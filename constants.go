@@ -35,6 +35,10 @@ const (
 	ModeModerated  = 'm' // Only voiced users and operators can talk
 	ModeLimit      = 'l' // User limit
 	ModeKey        = 'k' // Channel password
+
+	ModeOwner        = 'q' // Owner privileges (non-standard)
+	ModeAdmin        = 'a' // Admin privileges (non-standard)
+	ModeHalfOperator = 'h' // Half-operator privileges (non-standard)
 )
 
 // IRC commands extracted from RFC2812 section 3.
