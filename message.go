@@ -49,8 +49,8 @@ func ParsePrefix(raw string) (p *Prefix) {
 
 	p = new(Prefix)
 
-	user := strings.IndexByte(raw, prefixUser)
-	host := strings.IndexByte(raw, prefixHost)
+	user := indexByte(raw, prefixUser)
+	host := indexByte(raw, prefixHost)
 
 	switch {
 
@@ -108,7 +108,7 @@ func (p *Prefix) IsHostmask() bool {
 
 // IsServer returns true if this prefix looks like a server name.
 func (p *Prefix) IsServer() bool {
-	return len(p.User) <= 0 && len(p.Host) <= 0 // && strings.IndexByte(p.Name, '.') > 0
+	return len(p.User) <= 0 && len(p.Host) <= 0 // && indexByte(p.Name, '.') > 0
 }
 
 // writeTo is an utility function to write the prefix to the bytes.Buffer in Message.String().
@@ -166,7 +166,7 @@ func ParseMessage(raw string) (m *Message) {
 	if raw[0] == prefix {
 
 		// Prefix ends with a space.
-		i = strings.IndexByte(raw, space)
+		i = indexByte(raw, space)
 
 		// Prefix string must not be empty if the indicator is present.
 		if i < 2 {
@@ -180,7 +180,7 @@ func ParseMessage(raw string) (m *Message) {
 	}
 
 	// Find end of command
-	j = i + strings.IndexByte(raw[i:], space)
+	j = i + indexByte(raw[i:], space)
 
 	// Extract command
 	if j > i {
@@ -196,7 +196,7 @@ func ParseMessage(raw string) (m *Message) {
 	j++
 
 	// Find prefix for trailer
-	i = strings.IndexByte(raw[j:], prefix)
+	i = indexByte(raw[j:], prefix)
 
 	if i < 0 {
 
