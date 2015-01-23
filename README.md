@@ -64,9 +64,9 @@ Servers:
 
 
 [Documentation]: https://godoc.org/github.com/sorcix/irc "Package documentation by Godoc.org"
-[Message]: http://godoc.org/github.com/sorcix/irc#Message "Message type documentation"
-[Prefix]: http://godoc.org/github.com/sorcix/irc#Prefix "Prefix type documentation"
-[Encoder]: http://godoc.org/github.com/sorcix/irc#Encoder "Encoder type documentation"
-[Decoder]: http://godoc.org/github.com/sorcix/irc#Decoder "Decoder type documentation"
-[Conn]: http://godoc.org/github.com/sorcix/irc#Conn "Conn type documentation"
-[RFC1459]: http://tools.ietf.org/html/rfc1459.html "RFC 1459"
+[Message]: https://godoc.org/github.com/sorcix/irc#Message "Message type documentation"
+[Prefix]: https://godoc.org/github.com/sorcix/irc#Prefix "Prefix type documentation"
+[Encoder]: https://godoc.org/github.com/sorcix/irc#Encoder "Encoder type documentation"
+[Decoder]: https://godoc.org/github.com/sorcix/irc#Decoder "Decoder type documentation"
+[Conn]: https://godoc.org/github.com/sorcix/irc#Conn "Conn type documentation"
+[RFC1459]: https://tools.ietf.org/html/rfc1459.html "RFC 1459"
