@@ -41,7 +41,7 @@ const (
 	ModeHalfOperator = 'h' // Half-operator privileges (non-standard)
 )
 
-// IRC commands extracted from RFC2812 section 3.
+// IRC commands extracted from RFC2812 section 3 and RFC2813 section 4.
 const (
 	PASS     = "PASS"
 	NICK     = "NICK"
@@ -88,6 +88,8 @@ const (
 	WALLOPS  = "WALLOPS"
 	USERHOST = "USERHOST"
 	ISON     = "ISON"
+	SERVER   = "SERVER"
+	NJOIN    = "NJOIN"
 )
 
 // Numeric IRC replies extracted from RFC2812 section 5.
