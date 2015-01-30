@@ -16,10 +16,13 @@ const (
 	prefixHost byte = 0x40 // Hostname
 	space      byte = 0x20 // Separator
 
-	cutset string = "\r\n\x20\x00" // Characters to trim from prefixes/messages.
-
 	maxLength = 510 // Maximum length is 512 - 2 for the line endings.
 )
+
+func cutsetFunc(r rune) bool {
+	// Characters to trim from prefixes/messages.
+	return r == '\r' || r == '\n' || r == '\x20' || r == '\x00'
+}
 
 // Objects implementing the Sender interface are able to send messages to an IRC server.
 //
@@ -155,7 +158,7 @@ type Message struct {
 func ParseMessage(raw string) (m *Message) {
 
 	// Ignore empty messages.
-	if raw = strings.Trim(raw, cutset); len(raw) < 2 {
+	if raw = strings.TrimFunc(raw, cutsetFunc); len(raw) < 2 {
 		return nil
 	}
 
