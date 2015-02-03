@@ -90,6 +90,13 @@ func (p *Prefix) Len() (length int) {
 	return
 }
 
+// Bytes returns a []byte representation of this prefix.
+func (p *Prefix) Bytes() []byte {
+	buffer := new(bytes.Buffer)
+	p.writeTo(buffer)
+	return buffer.Bytes()
+}
+
 // String returns a string representation of this prefix.
 func (p *Prefix) String() (s string) {
 	// Benchmarks revealed that in this case simple string concatenation
