@@ -32,7 +32,7 @@ func ParseTags(raw string) (t Tags) {
 	t = make(Tags)
 
 	for i := range parts {
-		value = strings.IndexByte(parts[i], prefixTagValue)
+		value = indexByte(parts[i], prefixTagValue)
 
 		if value < 0 {
 
