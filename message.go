@@ -21,7 +21,7 @@ const (
 
 func cutsetFunc(r rune) bool {
 	// Characters to trim from prefixes/messages.
-	return r == '\r' || r == '\n' || r == '\x20' || r == '\x00'
+	return r == '\r' || r == '\n'
 }
 
 // Objects implementing the Sender interface are able to send messages to an IRC server.

@@ -254,6 +254,21 @@ var messageTests = [...]*struct {
 		rawMessage: "TOPIC #foo :",
 		rawPrefix:  "",
 	},
+	{
+		parsed: &Message{
+			Prefix: &Prefix{
+				Name: "name",
+				User: "user",
+				Host: "example.org",
+			},
+			Command:  "PRIVMSG",
+			Params:   []string{"#test"},
+			Trailing: "Message with spaces at the end!  ",
+		},
+		rawMessage: ":name!user@example.org PRIVMSG #test :Message with spaces at the end!  ",
+		rawPrefix:  "name!user@example.org",
+		hostmask:   true,
+	},
 }
 
 // -----
