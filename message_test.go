@@ -10,11 +10,12 @@ import (
 )
 
 var messageTests = [...]*struct {
-	parsed     *Message
-	rawMessage string
-	rawPrefix  string
-	hostmask   bool // Is it very clear that the prefix is a hostname?
-	server     bool // Is the prefix a servername?
+	parsed            *Message
+	normalizedMessage string
+	rawMessage        string
+	rawPrefix         string
+	hostmask          bool // Is it very clear that the prefix is a hostname?
+	server            bool // Is the prefix a servername?
 }{
 	{
 		parsed: &Message{
@@ -23,8 +24,8 @@ var messageTests = [...]*struct {
 				User: "kalt",
 				Host: "millennium.stealth.net",
 			},
-			Command:  "QUIT",
-			Trailing: "Gone to have lunch",
+			Command: "QUIT",
+			Params:  []string{"Gone to have lunch"},
 		},
 		rawMessage: ":syrk!kalt@millennium.stealth.net QUIT :Gone to have lunch",
 		rawPrefix:  "syrk!kalt@millennium.stealth.net",
@@ -35,9 +36,8 @@ var messageTests = [...]*struct {
 			Prefix: &Prefix{
 				Name: "Trillian",
 			},
-			Command:  "SQUIT",
-			Params:   []string{"cm22.eng.umd.edu"},
-			Trailing: "Server out of control",
+			Command: "SQUIT",
+			Params:  []string{"cm22.eng.umd.edu", "Server out of control"},
 		},
 		rawMessage: ":Trillian SQUIT cm22.eng.umd.edu :Server out of control",
 		rawPrefix:  "Trillian",
@@ -53,9 +53,10 @@ var messageTests = [...]*struct {
 			Command: "JOIN",
 			Params:  []string{"#Twilight_zone"},
 		},
-		rawMessage: ":WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone",
-		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
-		hostmask:   true,
+		normalizedMessage: ":WiZ!jto@tolsun.oulu.fi JOIN :#Twilight_zone",
+		rawMessage:        ":WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone",
+		rawPrefix:         "WiZ!jto@tolsun.oulu.fi",
+		hostmask:          true,
 	},
 	{
 		parsed: &Message{
@@ -64,9 +65,8 @@ var messageTests = [...]*struct {
 				User: "jto",
 				Host: "tolsun.oulu.fi",
 			},
-			Command:  "PART",
-			Params:   []string{"#playzone"},
-			Trailing: "I lost",
+			Command: "PART",
+			Params:  []string{"#playzone", "I lost"},
 		},
 		rawMessage: ":WiZ!jto@tolsun.oulu.fi PART #playzone :I lost",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
@@ -82,22 +82,23 @@ var messageTests = [...]*struct {
 			Command: "MODE",
 			Params:  []string{"#eu-opers", "-l"},
 		},
-		rawMessage: ":WiZ!jto@tolsun.oulu.fi MODE #eu-opers -l",
-		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
-		hostmask:   true,
+		normalizedMessage: ":WiZ!jto@tolsun.oulu.fi MODE #eu-opers :-l",
+		rawMessage:        ":WiZ!jto@tolsun.oulu.fi MODE #eu-opers -l",
+		rawPrefix:         "WiZ!jto@tolsun.oulu.fi",
+		hostmask:          true,
 	},
 	{
 		parsed: &Message{
 			Command: "MODE",
 			Params:  []string{"&oulu", "+b", "*!*@*.edu", "+e", "*!*@*.bu.edu"},
 		},
-		rawMessage: "MODE &oulu +b *!*@*.edu +e *!*@*.bu.edu",
+		normalizedMessage: "MODE &oulu +b *!*@*.edu +e :*!*@*.bu.edu",
+		rawMessage:        "MODE &oulu +b *!*@*.edu +e *!*@*.bu.edu",
 	},
 	{
 		parsed: &Message{
-			Command:  "PRIVMSG",
-			Params:   []string{"#channel"},
-			Trailing: "Message with :colons!",
+			Command: "PRIVMSG",
+			Params:  []string{"#channel", "Message with :colons!"},
 		},
 		rawMessage: "PRIVMSG #channel :Message with :colons!",
 	},
@@ -106,9 +107,8 @@ var messageTests = [...]*struct {
 			Prefix: &Prefix{
 				Name: "irc.vives.lan",
 			},
-			Command:  "251",
-			Params:   []string{"test"},
-			Trailing: "There are 2 users and 0 services on 1 servers",
+			Command: "251",
+			Params:  []string{"test", "There are 2 users and 0 services on 1 servers"},
 		},
 		rawMessage: ":irc.vives.lan 251 test :There are 2 users and 0 services on 1 servers",
 		rawPrefix:  "irc.vives.lan",
@@ -119,9 +119,8 @@ var messageTests = [...]*struct {
 			Prefix: &Prefix{
 				Name: "irc.vives.lan",
 			},
-			Command:  "376",
-			Params:   []string{"test"},
-			Trailing: "End of MOTD command",
+			Command: "376",
+			Params:  []string{"test", "End of MOTD command"},
 		},
 		rawMessage: ":irc.vives.lan 376 test :End of MOTD command",
 		rawPrefix:  "irc.vives.lan",
@@ -132,9 +131,8 @@ var messageTests = [...]*struct {
 			Prefix: &Prefix{
 				Name: "irc.vives.lan",
 			},
-			Command:  "250",
-			Params:   []string{"test"},
-			Trailing: "Highest connection count: 1 (1 connections received)",
+			Command: "250",
+			Params:  []string{"test", "Highest connection count: 1 (1 connections received)"},
 		},
 		rawMessage: ":irc.vives.lan 250 test :Highest connection count: 1 (1 connections received)",
 		rawPrefix:  "irc.vives.lan",
@@ -147,9 +145,8 @@ var messageTests = [...]*struct {
 				User: "~sorcix",
 				Host: "sorcix.users.quakenet.org",
 			},
-			Command:  "PRIVMSG",
-			Params:   []string{"#viveslan"},
-			Trailing: "\001ACTION is testing CTCP messages!\001",
+			Command: "PRIVMSG",
+			Params:  []string{"#viveslan", "\001ACTION is testing CTCP messages!\001"},
 		},
 		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org PRIVMSG #viveslan :\001ACTION is testing CTCP messages!\001",
 		rawPrefix:  "sorcix!~sorcix@sorcix.users.quakenet.org",
@@ -162,9 +159,8 @@ var messageTests = [...]*struct {
 				User: "~sorcix",
 				Host: "sorcix.users.quakenet.org",
 			},
-			Command:  "NOTICE",
-			Params:   []string{"midnightfox"},
-			Trailing: "\001PONG 1234567890\001",
+			Command: "NOTICE",
+			Params:  []string{"midnightfox", "\001PONG 1234567890\001"},
 		},
 		rawMessage: ":sorcix!~sorcix@sorcix.users.quakenet.org NOTICE midnightfox :\001PONG 1234567890\001",
 		rawPrefix:  "sorcix!~sorcix@sorcix.users.quakenet.org",
@@ -189,8 +185,8 @@ var messageTests = [...]*struct {
 				Name: "a",
 				User: "b",
 			},
-			Command:  "PRIVMSG",
-			Trailing: "message",
+			Command: "PRIVMSG",
+			Params:  []string{"message"},
 		},
 		rawMessage: ":a!b PRIVMSG :message",
 		rawPrefix:  "a!b",
@@ -201,8 +197,8 @@ var messageTests = [...]*struct {
 				Name: "a",
 				Host: "c",
 			},
-			Command:  "NOTICE",
-			Trailing: ":::Hey!",
+			Command: "NOTICE",
+			Params:  []string{":::Hey!"},
 		},
 		rawMessage: ":a@c NOTICE ::::Hey!",
 		rawPrefix:  "a@c",
@@ -212,20 +208,19 @@ var messageTests = [...]*struct {
 			Prefix: &Prefix{
 				Name: "nick",
 			},
-			Command:  "PRIVMSG",
-			Params:   []string{"$@"},
-			Trailing: "This message contains a\ttab!",
+			Command: "PRIVMSG",
+			Params:  []string{"$@", "This message contains a\ttab!"},
 		},
 		rawMessage: ":nick PRIVMSG $@ :This message contains a\ttab!",
 		rawPrefix:  "nick",
 	},
 	{
 		parsed: &Message{
-			Command:  "TEST",
-			Params:   []string{"$@", "", "param"},
-			Trailing: "Trailing",
+			Command: "TEST",
+			Params:  []string{"$@", "param", "Trailing"},
 		},
-		rawMessage: "TEST $@  param :Trailing",
+		normalizedMessage: "TEST $@ param :Trailing",
+		rawMessage:        "TEST $@  param :Trailing",
 	},
 	{
 		rawMessage: ": PRIVMSG test :Invalid message with empty prefix.",
@@ -236,20 +231,22 @@ var messageTests = [...]*struct {
 		rawPrefix:  " ",
 	},
 	{
-		parsed: &Message{
-			Command:  "TOPIC",
-			Params:   []string{"#foo"},
-			Trailing: "",
-		},
-		rawMessage: "TOPIC #foo",
-		rawPrefix:  "",
+		rawMessage: ":prefix ",
+		rawPrefix:  "prefix",
 	},
 	{
 		parsed: &Message{
-			Command:       "TOPIC",
-			Params:        []string{"#foo"},
-			Trailing:      "",
-			EmptyTrailing: true,
+			Command: "TOPIC",
+			Params:  []string{"#foo"},
+		},
+		normalizedMessage: "TOPIC :#foo",
+		rawMessage:        "TOPIC #foo",
+		rawPrefix:         "",
+	},
+	{
+		parsed: &Message{
+			Command: "TOPIC",
+			Params:  []string{"#foo", ""},
 		},
 		rawMessage: "TOPIC #foo :",
 		rawPrefix:  "",
@@ -261,13 +258,15 @@ var messageTests = [...]*struct {
 				User: "user",
 				Host: "example.org",
 			},
-			Command:  "PRIVMSG",
-			Params:   []string{"#test"},
-			Trailing: "Message with spaces at the end!  ",
+			Command: "PRIVMSG",
+			Params:  []string{"#test", "Message with spaces at the end!  "},
 		},
 		rawMessage: ":name!user@example.org PRIVMSG #test :Message with spaces at the end!  ",
 		rawPrefix:  "name!user@example.org",
 		hostmask:   true,
+	},
+	{
+		rawMessage: "",
 	},
 }
 
@@ -390,10 +389,15 @@ func TestMessage_String(t *testing.T) {
 		s = test.parsed.String()
 
 		// Result should be the same as the value in rawMessage.
-		if s != test.rawMessage {
+		msg := test.rawMessage
+		if test.normalizedMessage != "" {
+			msg = test.normalizedMessage
+		}
+
+		if s != msg {
 			t.Errorf("Failed to stringify message %d:", i)
 			t.Logf("Output: %s", s)
-			t.Logf("Expected: %s", test.rawMessage)
+			t.Logf("Expected: %s", msg)
 		}
 	}
 }
@@ -411,10 +415,15 @@ func TestMessage_Len(t *testing.T) {
 		l = test.parsed.Len()
 
 		// Result should be the same as the value in rawMessage.
-		if l != len(test.rawMessage) {
+		msg := test.rawMessage
+		if test.normalizedMessage != "" {
+			msg = test.normalizedMessage
+		}
+
+		if l != len(msg) {
 			t.Errorf("Failed to calculate message length %d:", i)
 			t.Logf("Output: %d", l)
-			t.Logf("Expected: %d", len(test.rawMessage))
+			t.Logf("Expected: %d", len(msg))
 		}
 	}
 }
@@ -458,7 +467,12 @@ func TestMessageDecodeEncode(t *testing.T) {
 		s = p.String()
 
 		// Result struct should be the same as the original.
-		if s != test.rawMessage {
+		msg := test.rawMessage
+		if test.normalizedMessage != "" {
+			msg = test.normalizedMessage
+		}
+
+		if s != msg {
 			t.Errorf("Message %d failed decode-encode sequence!", i)
 		}
 	}
