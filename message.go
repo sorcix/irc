@@ -152,12 +152,8 @@ func (p *Prefix) writeTo(buffer *bytes.Buffer) {
 //    <crlf>     ::= CR LF
 type Message struct {
 	*Prefix
-	Command  string
-	Params   []string
-	Trailing string
-
-	// When set to true, the trailing prefix (:) will be added even if the trailing message is empty.
-	EmptyTrailing bool
+	Command string
+	Params  []string
 }
 
 // ParseMessage takes a string and attempts to create a Message struct.
@@ -169,70 +165,65 @@ func ParseMessage(raw string) (m *Message) {
 		return nil
 	}
 
-	i, j := 0, 0
-
 	m = new(Message)
 
 	if raw[0] == prefix {
 
-		// Prefix ends with a space.
-		i = indexByte(raw, space)
-
-		// Prefix string must not be empty if the indicator is present.
-		if i < 2 {
+		// Split the string on space, skipping the first character
+		split := strings.SplitN(raw[1:], " ", 2)
+		if len(split) < 2 || len(split[0]) < 1 {
 			return nil
 		}
 
-		m.Prefix = ParsePrefix(raw[1:i])
+		// Parse the first part of the split as the prefix
+		m.Prefix = ParsePrefix(split[0])
 
-		// Skip space at the end of the prefix
-		i++
+		// We can continue to parse the remainder of the message
+		raw = split[1]
+
 	}
 
-	// Find end of command
-	j = i + indexByte(raw[i:], space)
+	// We split out trailing now. This way, using Fields to split the rest of
+	// the parameters will remove duplicate spaces
+	split := strings.SplitN(raw, " :", 2)
 
-	// Extract command
-	if j > i {
-		m.Command = raw[i:j]
-	} else {
-		m.Command = raw[i:]
+	// Because params can be delimited by one or more spaces, we have to use
+	// strings.FieldsFunc, rather than strings.Split
+	m.Params = strings.FieldsFunc(split[0], func(r rune) bool {
+		return r == ' '
+	})
 
-		// We're done here!
-		return m
+	// The first param is the command, so we bail if we can't find it
+	if len(m.Params) < 1 {
+		return nil
 	}
 
-	// Skip space after command
-	j++
+	m.Command = m.Params[0]
+	m.Params = m.Params[1:]
 
-	// Find prefix for trailer
-	i = indexByte(raw[j:], prefix)
-
-	if i < 0 {
-
-		// There is no trailing argument!
-		m.Params = strings.Split(raw[j:], string(space))
-
-		// We're done here!
-		return m
+	// Append the trailing argument onto the params if we had one
+	if len(split) == 2 {
+		m.Params = append(m.Params, split[1])
 	}
 
-	// Compensate for index on substring
-	i = i + j
-
-	// Check if we need to parse arguments.
-	if i > j {
-		m.Params = strings.Split(raw[j:i-1], string(space))
-	}
-
-	m.Trailing = raw[i+1:]
-
-	// We need to re-encode the trailing argument even if it was empty.
-	if len(m.Trailing) <= 0 {
-		m.EmptyTrailing = true
+	// If there were no params, set it to nil to be consistent
+	if len(m.Params) == 0 {
+		m.Params = nil
 	}
 
 	return m
+
+}
+
+//Trailing returns the last param of a message, or an empty string if there
+// were no params.
+func (m *Message) Trailing() string {
+
+	if len(m.Params) == 0 {
+		return ""
+	}
+
+	return m.Params[len(m.Params)-1]
 
 }
 
@@ -246,14 +237,12 @@ func (m *Message) Len() (length int) {
 	length = length + len(m.Command)
 
 	if len(m.Params) > 0 {
-		length = length + len(m.Params)
+		// len(m.Params) is the number of spaces. We add one for the : in the
+		// trailing argument.
+		length = length + len(m.Params) + 1
 		for _, param := range m.Params {
 			length = length + len(param)
 		}
-	}
-
-	if len(m.Trailing) > 0 || m.EmptyTrailing {
-		length = length + len(m.Trailing) + 2 // Include prefix and space
 	}
 
 	return
@@ -280,14 +269,13 @@ func (m *Message) Bytes() []byte {
 
 	// Space separated list of arguments
 	if len(m.Params) > 0 {
-		buffer.WriteByte(space)
-		buffer.WriteString(strings.Join(m.Params, string(space)))
-	}
-
-	if len(m.Trailing) > 0 || m.EmptyTrailing {
+		if len(m.Params) > 1 {
+			buffer.WriteByte(space)
+			buffer.WriteString(strings.Join(m.Params[:len(m.Params)-1], string(space)))
+		}
 		buffer.WriteByte(space)
 		buffer.WriteByte(prefix)
-		buffer.WriteString(m.Trailing)
+		buffer.WriteString(m.Params[len(m.Params)-1])
 	}
 
 	// We need the limit the buffer length.
