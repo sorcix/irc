@@ -215,6 +215,18 @@ func ParseMessage(raw string) (m *Message) {
 
 }
 
+//Trailing returns the last param of a message, or an empty string if there
+// were no params.
+func (m *Message) Trailing() string {
+
+	if len(m.Params) == 0 {
+		return ""
+	}
+
+	return m.Params[len(m.Params)-1]
+
+}
+
 // Len calculates the length of the string representation of this message.
 func (m *Message) Len() (length int) {
 
