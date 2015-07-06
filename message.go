@@ -12,7 +12,7 @@ import (
 // Various constants used for formatting IRC messages.
 const (
 	tags          byte = 0x40 // Tag start indicator
-	tagsEquals    byte = 0x3D
+	tagsEquals    byte = 0x3D // Keys and values are separated using equal signs
 	tagsSeparator byte = 0x3B // Separator between multiple tags
 	prefix        byte = 0x3A // Prefix or last argument
 	prefixUser    byte = 0x21 // Username
@@ -92,6 +92,26 @@ func (t *Tags) GetTag(key string) (string, bool) {
 	}
 
 	return "", false
+}
+
+// String returns the string representation of all set message tags
+func (t *Tags) String() (s string) {
+	var buf bytes.Buffer
+
+	for key, val := range t.values {
+		buf.WriteString(key)
+
+		if len(val) > 0 {
+			buf.WriteString("=")
+			buf.WriteString(val)
+		}
+
+		buf.WriteString(";")
+	}
+
+	s = strings.TrimRight(buf.String(), ";")
+
+	return s
 }
 
 // Prefix represents the prefix (sender) of an IRC message.
