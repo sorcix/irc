@@ -11,10 +11,13 @@ import (
 
 // Various constants used for formatting IRC messages.
 const (
-	prefix     byte = 0x3A // Prefix or last argument
-	prefixUser byte = 0x21 // Username
-	prefixHost byte = 0x40 // Hostname
-	space      byte = 0x20 // Separator
+	tags          byte = 0x40 // Tag start indicator
+	tagsEquals    byte = 0x3D
+	tagsSeparator byte = 0x3B // Separator between multiple tags
+	prefix        byte = 0x3A // Prefix or last argument
+	prefixUser    byte = 0x21 // Username
+	prefixHost    byte = 0x40 // Hostname
+	space         byte = 0x20 // Separator
 
 	maxLength = 510 // Maximum length is 512 - 2 for the line endings.
 )
@@ -34,6 +37,61 @@ func cutsetFunc(r rune) bool {
 // defined here in the first place. For backwards compatibility only.
 type Sender interface {
 	Send(*Message) error
+}
+
+// Tags represents (optional) tags added to the start of each message
+// See IRCv3.2 Message Tags (http://ircv3.net/specs/core/message-tags-3.2.html)
+//
+// <message>       ::= ['@' <tags> <SPACE>] [':' <prefix> <SPACE> ] <command> <params> <crlf>
+// <tags>          ::= <tag> [';' <tag>]*
+// <tag>           ::= <key> ['=' <escaped value>]
+// <key>           ::= [ <vendor> '/' ] <sequence of letters, digits, hyphens (`-`)>
+// <escaped value> ::= <sequence of any characters except NUL, CR, LF, semicolon (`;`) and SPACE>
+// <vendor>        ::= <host>
+type Tags struct {
+	values map[string]string
+}
+
+// ParseTags takes a string and attempts to create a Tags struct
+func ParseTags(raw string) (t *Tags) {
+	t = &Tags{
+		values: make(map[string]string),
+	}
+
+	tags := strings.Split(raw, string(tagsSeparator))
+
+	for _, val := range tags {
+		tagParts := strings.Split(val, string(tagsEquals))
+		// Tag must at least contain a key
+		if len(tagParts) < 1 {
+			continue
+		}
+
+		// Tag only contains key, set empty value
+		if len(tagParts) == 1 {
+			t.values[tagParts[0]] = ""
+			continue
+		}
+
+		unescaped := strings.Replace(tagParts[1], "\\:", ";", -1)
+		unescaped = strings.Replace(unescaped, "\\s", " ", -1)
+		unescaped = strings.Replace(unescaped, "\\s", "\\", -1)
+		unescaped = strings.Replace(unescaped, "CR", "\r", -1)
+		unescaped = strings.Replace(unescaped, "LF", "\n", -1)
+
+		t.values[tagParts[0]] = unescaped
+	}
+
+	return t
+}
+
+// GetTag checks whether a tag with the given key exists. The boolean return value indicates whether a value was found
+func (t *Tags) GetTag(key string) (string, bool) {
+	if val, ok := t.values[key]; ok {
+		return val, true
+	}
+
+	return "", false
 }
 
 // Prefix represents the prefix (sender) of an IRC message.
@@ -151,6 +209,7 @@ func (p *Prefix) writeTo(buffer *bytes.Buffer) {
 //
 //    <crlf>     ::= CR LF
 type Message struct {
+	*Tags
 	*Prefix
 	Command  string
 	Params   []string
@@ -169,21 +228,34 @@ func ParseMessage(raw string) (m *Message) {
 		return nil
 	}
 
-	i, j := 0, 0
+	i, j, k := 0, 0, 0
 
 	m = new(Message)
 
-	if raw[0] == prefix {
+	if raw[k] == tags {
+		// Tags end with a space
+		k = indexByte(raw, space)
 
+		// Tags must not be empty if the indicator is present
+		if k < 2 {
+			return nil
+		}
+
+		m.Tags = ParseTags(raw[1:k])
+		// Skip space at the end of the tags
+		k++
+	}
+
+	if raw[k] == prefix {
 		// Prefix ends with a space.
-		i = indexByte(raw, space)
+		i = k + indexByte(raw[k:], space)
 
 		// Prefix string must not be empty if the indicator is present.
 		if i < 2 {
 			return nil
 		}
 
-		m.Prefix = ParsePrefix(raw[1:i])
+		m.Prefix = ParsePrefix(raw[k+1 : i])
 
 		// Skip space at the end of the prefix
 		i++
