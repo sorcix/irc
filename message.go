@@ -194,9 +194,9 @@ func ParseMessage(raw string) (m *Message) {
 
 	// Extract command
 	if j > i {
-		m.Command = raw[i:j]
+		m.Command = strings.ToUpper(raw[i:j])
 	} else {
-		m.Command = raw[i:]
+		m.Command = strings.ToUpper(raw[i:])
 
 		// We're done here!
 		return m
