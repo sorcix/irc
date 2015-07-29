@@ -12,7 +12,7 @@ import (
 const (
 	prefixTag      byte = 0x40
 	prefixTagValue byte = 0x3D
-	tagSeparator   byte = 0x2C
+	tagSeparator   byte = 0x3B
 
 	empty = ""
 )
@@ -34,7 +34,7 @@ func ParseTags(raw string) (t Tags) {
 	for i := range parts {
 		value = indexByte(parts[i], prefixTagValue)
 
-		if value < 0 {
+		if value >= 0 {
 
 			// Malformed message tags may have an equals sign but no value.
 			if len(parts[i]) < value+1 {
@@ -93,7 +93,7 @@ func (t Tags) writeTo(buffer *bytes.Buffer) {
 			buffer.WriteByte(prefixTagValue)
 			buffer.WriteString(value)
 		}
-		if current < max {
+		if current <= max {
 			buffer.WriteByte(tagSeparator)
 		}
 		current++
