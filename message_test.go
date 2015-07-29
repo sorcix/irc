@@ -10,11 +10,12 @@ import (
 )
 
 var messageTests = [...]*struct {
-	parsed     *Message
-	rawMessage string
-	rawPrefix  string
-	hostmask   bool // Is it very clear that the prefix is a hostname?
-	server     bool // Is the prefix a servername?
+	parsed          *Message
+	rawMessage      string
+	renderedMessage string
+	rawPrefix       string
+	hostmask        bool // Is it very clear that the prefix is a hostname?
+	server          bool // Is the prefix a servername?
 }{
 	{
 		parsed: &Message{
@@ -222,10 +223,11 @@ var messageTests = [...]*struct {
 	{
 		parsed: &Message{
 			Command:  "TEST",
-			Params:   []string{"$@", "", "param"},
+			Params:   []string{"$@", "param"},
 			Trailing: "Trailing",
 		},
-		rawMessage: "TEST $@  param :Trailing",
+		rawMessage:      "TEST $@  param :Trailing",
+		renderedMessage: "TEST $@ param :Trailing",
 	},
 	{
 		rawMessage: ": PRIVMSG test :Invalid message with empty prefix.",
@@ -390,7 +392,13 @@ func TestMessage_String(t *testing.T) {
 		s = test.parsed.String()
 
 		// Result should be the same as the value in rawMessage.
-		if s != test.rawMessage {
+		if test.renderedMessage != "" {
+			if s != test.renderedMessage {
+				t.Errorf("Failed to stringify message %d:", i)
+				t.Logf("Output: %s", s)
+				t.Logf("Expected: %s", test.renderedMessage)
+			}
+		} else if s != test.rawMessage {
 			t.Errorf("Failed to stringify message %d:", i)
 			t.Logf("Output: %s", s)
 			t.Logf("Expected: %s", test.rawMessage)
@@ -411,7 +419,13 @@ func TestMessage_Len(t *testing.T) {
 		l = test.parsed.Len()
 
 		// Result should be the same as the value in rawMessage.
-		if l != len(test.rawMessage) {
+		if test.renderedMessage != "" {
+			if l != len(test.renderedMessage) {
+				t.Errorf("Failed to calculate message length %d:", i)
+				t.Logf("Output: %d", l)
+				t.Logf("Expected: %d", len(test.renderedMessage))
+			}
+		} else if l != len(test.rawMessage) {
 			t.Errorf("Failed to calculate message length %d:", i)
 			t.Logf("Output: %d", l)
 			t.Logf("Expected: %d", len(test.rawMessage))
@@ -458,7 +472,11 @@ func TestMessageDecodeEncode(t *testing.T) {
 		s = p.String()
 
 		// Result struct should be the same as the original.
-		if s != test.rawMessage {
+		if test.renderedMessage != "" {
+			if s != test.renderedMessage {
+				t.Errorf("Message %d failed decode-encode sequence!", i)
+			}
+		} else if s != test.rawMessage {
 			t.Errorf("Message %d failed decode-encode sequence!", i)
 		}
 	}
