@@ -169,67 +169,53 @@ func ParseMessage(raw string) (m *Message) {
 		return nil
 	}
 
-	i, j := 0, 0
-
 	m = new(Message)
 
 	if raw[0] == prefix {
 
-		// Prefix ends with a space.
-		i = indexByte(raw, space)
-
-		// Prefix string must not be empty if the indicator is present.
-		if i < 2 {
+		// Split the string on the first space, skipping the first character
+		split := strings.SplitN(raw[1:], " ", 2)
+		if len(split) < 2 || len(split[0]) < 1 {
 			return nil
 		}
 
-		m.Prefix = ParsePrefix(raw[1:i])
+		// Parse the first part of the split as the prefix
+		m.Prefix = ParsePrefix(split[0])
 
-		// Skip space at the end of the prefix
-		i++
+		// We can continue to parse the remainder of the message
+		raw = split[1]
+
 	}
 
-	// Find end of command
-	j = i + indexByte(raw[i:], space)
+	// We split out trailing now. This way, using Fields to split the rest of
+	// the parameters will remove duplicate spaces.
+	split := strings.SplitN(raw, " :", 2)
 
-	// Extract command
-	if j > i {
-		m.Command = strings.ToUpper(raw[i:j])
-	} else {
-		m.Command = strings.ToUpper(raw[i:])
+	// Because params can be delimited by one or more spaces, we have to use
+	// strings.FieldsFunc, rather than strings.Split
+	m.Params = strings.FieldsFunc(split[0], func(r rune) bool {
+		return r == ' '
+	})
 
-		// We're done here!
-		return m
+	// The first param is the command, so we bail if we can't find it
+	if len(m.Params) < 1 {
+		return nil
 	}
 
-	// Skip space after command
-	j++
+	m.Command = strings.ToUpper(m.Params[0])
+	m.Params = m.Params[1:]
 
-	// Find prefix for trailer
-	i = indexByte(raw[j:], prefix)
-
-	if i < 0 {
-
-		// There is no trailing argument!
-		m.Params = strings.Split(raw[j:], string(space))
-
-		// We're done here!
-		return m
+	// If we had a split earlier,
+	if len(split) == 2 {
+		m.Trailing = split[1]
+		if m.Trailing == "" {
+			m.EmptyTrailing = true
+		}
 	}
 
-	// Compensate for index on substring
-	i = i + j
-
-	// Check if we need to parse arguments.
-	if i > j {
-		m.Params = strings.Split(raw[j:i-1], string(space))
-	}
-
-	m.Trailing = raw[i+1:]
-
-	// We need to re-encode the trailing argument even if it was empty.
-	if len(m.Trailing) <= 0 {
-		m.EmptyTrailing = true
+	// If there were no params, set it to nil to be consistent
+	if len(m.Params) == 0 {
+		m.Params = nil
 	}
 
 	return m
