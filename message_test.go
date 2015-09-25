@@ -269,6 +269,14 @@ var messageTests = [...]*struct {
 		rawPrefix:  "name!user@example.org",
 		hostmask:   true,
 	},
+	{
+		parsed: &Message{
+			Command:  "PASS",
+			Params: []string{"oauth:token_goes_here"},
+		},
+		rawMessage: "PASS oauth:token_goes_here",
+		rawPrefix:  "",
+	},
 }
 
 // -----
