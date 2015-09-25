@@ -271,8 +271,8 @@ var messageTests = [...]*struct {
 	},
 	{
 		parsed: &Message{
-			Command:  "PASS",
-			Params: []string{"oauth:token_goes_here"},
+			Command: "PASS",
+			Params:  []string{"oauth:token_goes_here"},
 		},
 		rawMessage: "PASS oauth:token_goes_here",
 		rawPrefix:  "",
