@@ -104,9 +104,16 @@ func (t Tags) writeTo(buffer *bytes.Buffer) {
 //
 // If you need to get the escaped value as found in the IRC message, access the map directly.
 func (t Tags) Get(key string) (string, bool) {
-	//TODO(sorcix): Unescape
+
 	if value, ok := t[key]; ok {
-		return value, true
+		// TODO(sorcix): Clean this up.
+		unescaped := strings.Replace(value, "\\:", ";", -1)
+		unescaped = strings.Replace(unescaped, "\\s", " ", -1)
+		unescaped = strings.Replace(unescaped, "\\\\", "\\", -1)
+		unescaped = strings.Replace(unescaped, "\\r", "\r", -1)
+		unescaped = strings.Replace(unescaped, "\\n", "\n", -1)
+
+		return unescaped, true
 	}
 	return empty, false
 }
@@ -115,6 +122,11 @@ func (t Tags) Get(key string) (string, bool) {
 //
 // If you want to save an already escaped value or a value that does not need escaping, access the map directly.
 func (t Tags) Set(key, value string) {
-	//TODO(sorcix): Escape
-	t[key] = value
+	//TODO(sorcix): Clean this up.
+	escaped := strings.Replace(value, ";", "\\:", -1)
+	escaped = strings.Replace(escaped, " ", "\\s", -1)
+	escaped = strings.Replace(escaped, "\\", "\\\\", -1)
+	escaped = strings.Replace(escaped, "\r", "\\r", -1)
+	escaped = strings.Replace(escaped, "\n", "\\n", -1)
+	t[key] = escaped
 }
