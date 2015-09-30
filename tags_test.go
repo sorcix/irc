@@ -10,16 +10,16 @@ import (
 )
 
 var tagsTests = [...]*struct {
-	parsed     Tags
-	raw  string
+	parsed Tags
+	raw    string
 }{
 	{
-		parsed: Tags {
-			"aaa": "bbb",
-			"ccc": "",
+		parsed: Tags{
+			"aaa":             "bbb",
+			"ccc":             "",
 			"example.com/ddd": "eee",
 		},
-		raw:  "aaa=bbb;ccc;example.com/ddd=eee",
+		raw: "aaa=bbb;ccc;example.com/ddd=eee",
 	},
 }
 
