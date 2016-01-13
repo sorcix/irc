@@ -33,4 +33,4 @@
 //    // Methods from both Encoder and Decoder are available
 //    message, err := c.Decode()
 //
-package irc // import "github.com/morpheusxaut/irc"
+package irc // import "github.com/jakebailey/irc"

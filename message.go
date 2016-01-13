@@ -22,6 +22,10 @@ const (
 	maxLength = 510 // Maximum length is 512 - 2 for the line endings.
 )
 
+var (
+	tagEscapeReplacer = strings.NewReplacer("\\:", ";", "\\s", " ", "\\r", "\r", "\\n", "\n")
+)
+
 func cutsetFunc(r rune) bool {
 	// Characters to trim from prefixes/messages.
 	return r == '\r' || r == '\n'
@@ -61,7 +65,8 @@ func ParseTags(raw string) (t *Tags) {
 	tags := strings.Split(raw, string(tagsSeparator))
 
 	for _, val := range tags {
-		tagParts := strings.Split(val, string(tagsEquals))
+		replacedVal := tagEscapeReplacer.Replace(val)
+		tagParts := strings.SplitN(replacedVal, string(tagsEquals), 2)
 		// Tag must at least contain a key
 		if len(tagParts) < 1 {
 			continue
@@ -73,13 +78,7 @@ func ParseTags(raw string) (t *Tags) {
 			continue
 		}
 
-		unescaped := strings.Replace(tagParts[1], "\\:", ";", -1)
-		unescaped = strings.Replace(unescaped, "\\s", " ", -1)
-		unescaped = strings.Replace(unescaped, "\\s", "\\", -1)
-		unescaped = strings.Replace(unescaped, "CR", "\r", -1)
-		unescaped = strings.Replace(unescaped, "LF", "\n", -1)
-
-		t.values[tagParts[0]] = unescaped
+		t.values[tagParts[0]] = tagParts[1]
 	}
 
 	return t
