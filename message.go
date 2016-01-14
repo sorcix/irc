@@ -352,8 +352,28 @@ func (m *Message) Len() (length int) {
 // in length. This method forces that limit by discarding any characters
 // exceeding the length limit.
 func (m *Message) Bytes() []byte {
-
 	buffer := new(bytes.Buffer)
+
+	// Message tags
+	if m.Tags != nil {
+		buffer.WriteByte(tags)
+
+		i := 0
+		mapLen := len(m.Tags)
+		for k, v := range m.Tags {
+			buffer.WriteString(k)
+			if v != "" {
+				buffer.WriteByte(tagsEquals)
+				buffer.WriteString(v)
+			}
+
+			if i != mapLen-1 {
+				buffer.WriteByte(tagsSeparator)
+			}
+		}
+
+		buffer.WriteByte(space)
+	}
 
 	// Message prefix
 	if m.Prefix != nil {
