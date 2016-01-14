@@ -52,15 +52,11 @@ type Sender interface {
 // <key>           ::= [ <vendor> '/' ] <sequence of letters, digits, hyphens (`-`)>
 // <escaped value> ::= <sequence of any characters except NUL, CR, LF, semicolon (`;`) and SPACE>
 // <vendor>        ::= <host>
-type Tags struct {
-	values map[string]string
-}
+type Tags map[string]string
 
 // ParseTags takes a string and attempts to create a Tags struct
-func ParseTags(raw string) (t *Tags) {
-	t = &Tags{
-		values: make(map[string]string),
-	}
+func ParseTags(raw string) (t Tags) {
+	t = make(Tags)
 
 	tags := strings.Split(raw, string(tagsSeparator))
 
@@ -74,19 +70,19 @@ func ParseTags(raw string) (t *Tags) {
 
 		// Tag only contains key, set empty value
 		if len(tagParts) == 1 {
-			t.values[tagParts[0]] = ""
+			t[tagParts[0]] = ""
 			continue
 		}
 
-		t.values[tagParts[0]] = tagParts[1]
+		t[tagParts[0]] = tagParts[1]
 	}
 
 	return t
 }
 
 // GetTag checks whether a tag with the given key exists. The boolean return value indicates whether a value was found
-func (t *Tags) GetTag(key string) (string, bool) {
-	if val, ok := t.values[key]; ok {
+func (t Tags) GetTag(key string) (string, bool) {
+	if val, ok := t[key]; ok {
 		return val, true
 	}
 
@@ -94,10 +90,10 @@ func (t *Tags) GetTag(key string) (string, bool) {
 }
 
 // String returns the string representation of all set message tags
-func (t *Tags) String() (s string) {
+func (t Tags) String() (s string) {
 	var buf bytes.Buffer
 
-	for key, val := range t.values {
+	for key, val := range t {
 		buf.WriteString(key)
 
 		if len(val) > 0 {
@@ -228,7 +224,7 @@ func (p *Prefix) writeTo(buffer *bytes.Buffer) {
 //
 //    <crlf>     ::= CR LF
 type Message struct {
-	*Tags
+	Tags
 	*Prefix
 	Command  string
 	Params   []string
