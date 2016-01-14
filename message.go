@@ -366,10 +366,11 @@ func (m *Message) Bytes() []byte {
 				buffer.WriteByte(tagsEquals)
 				buffer.WriteString(v)
 			}
-
 			if i != mapLen-1 {
 				buffer.WriteByte(tagsSeparator)
 			}
+
+			i++
 		}
 
 		buffer.WriteByte(space)
