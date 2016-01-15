@@ -82,8 +82,10 @@ func ParseTags(raw string) (t Tags) {
 
 // GetTag checks whether a tag with the given key exists. The boolean return value indicates whether a value was found
 func (t Tags) GetTag(key string) (string, bool) {
-	if val, ok := t[key]; ok {
-		return val, true
+	if t != nil {
+		if val, ok := t[key]; ok {
+			return val, true
+		}
 	}
 
 	return "", false
@@ -91,6 +93,10 @@ func (t Tags) GetTag(key string) (string, bool) {
 
 // String returns the string representation of all set message tags
 func (t Tags) String() (s string) {
+	if t == nil {
+		return ""
+	}
+
 	var buf bytes.Buffer
 
 	for key, val := range t {
