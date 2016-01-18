@@ -91,28 +91,40 @@ func (t Tags) GetTag(key string) (string, bool) {
 	return "", false
 }
 
-// String returns the string representation of all set message tags
-func (t Tags) String() (s string) {
-	if t == nil {
-		return ""
-	}
+// writeTo is an utility function to write the tags list to a bytes.Buffer.
+func (t Tags) writeTo(buffer *bytes.Buffer) {
+	buffer.WriteByte(tags)
 
-	var buf bytes.Buffer
-
-	for key, val := range t {
-		buf.WriteString(key)
-
-		if len(val) > 0 {
-			buf.WriteString("=")
-			buf.WriteString(val)
+	i := 0
+	mapLen := len(t)
+	for k, v := range t {
+		buffer.WriteString(k)
+		if v != "" {
+			buffer.WriteByte(tagsEquals)
+			buffer.WriteString(v)
+		}
+		if i != mapLen-1 {
+			buffer.WriteByte(tagsSeparator)
 		}
 
-		buf.WriteString(";")
+		i++
+	}
+}
+
+// Bytes returns the []byte representation of this collection of message tags
+func (t Tags) Bytes() []byte {
+	if t == nil {
+		return nil
 	}
 
-	s = strings.TrimRight(buf.String(), ";")
+	buffer := new(bytes.Buffer)
+	t.writeTo(buffer)
+	return buffer.Bytes()
+}
 
-	return s
+// String returns the string representation of all set message tags
+func (t Tags) String() (s string) {
+	return string(t.Bytes())
 }
 
 // Prefix represents the prefix (sender) of an IRC message.
@@ -363,22 +375,7 @@ func (m *Message) Bytes() []byte {
 	// Message tags
 	if m.Tags != nil {
 		buffer.WriteByte(tags)
-
-		i := 0
-		mapLen := len(m.Tags)
-		for k, v := range m.Tags {
-			buffer.WriteString(k)
-			if v != "" {
-				buffer.WriteByte(tagsEquals)
-				buffer.WriteString(v)
-			}
-			if i != mapLen-1 {
-				buffer.WriteByte(tagsSeparator)
-			}
-
-			i++
-		}
-
+		m.Tags.writeTo(buffer)
 		buffer.WriteByte(space)
 	}
 
