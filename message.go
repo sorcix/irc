@@ -152,12 +152,15 @@ func (p *Prefix) writeTo(buffer *bytes.Buffer) {
 //    <crlf>     ::= CR LF
 type Message struct {
 	*Prefix
-	Command  string
-	Params   []string
-	Trailing string
+	Command string
+	Params  []string
+}
 
-	// When set to true, the trailing prefix (:) will be added even if the trailing message is empty.
-	EmptyTrailing bool
+func (m *Message) Trailing() string {
+	if len(m.Params) > 0 {
+		return m.Params[len(m.Params)-1]
+	}
+	return ""
 }
 
 // ParseMessage takes a string and attempts to create a Message struct.
@@ -225,15 +228,9 @@ func ParseMessage(raw string) (m *Message) {
 		m.Params = strings.Split(raw[j:i-1], string(space))
 	}
 
-	m.Trailing = raw[i+1:]
-
-	// We need to re-encode the trailing argument even if it was empty.
-	if len(m.Trailing) <= 0 {
-		m.EmptyTrailing = true
-	}
+	m.Params = append(m.Params, raw[i+1:])
 
 	return m
-
 }
 
 // Len calculates the length of the string representation of this message.
@@ -250,10 +247,9 @@ func (m *Message) Len() (length int) {
 		for _, param := range m.Params {
 			length = length + len(param)
 		}
-	}
 
-	if len(m.Trailing) > 0 || m.EmptyTrailing {
-		length = length + len(m.Trailing) + 2 // Include prefix and space
+		// Add one for the colon in the trailing parameter
+		length++
 	}
 
 	return
@@ -279,15 +275,15 @@ func (m *Message) Bytes() []byte {
 	buffer.WriteString(m.Command)
 
 	// Space separated list of arguments
-	if len(m.Params) > 0 {
+	if len(m.Params) > 1 {
 		buffer.WriteByte(space)
-		buffer.WriteString(strings.Join(m.Params, string(space)))
+		buffer.WriteString(strings.Join(m.Params[:len(m.Params)-1], string(space)))
 	}
 
-	if len(m.Trailing) > 0 || m.EmptyTrailing {
+	if len(m.Params) > 0 {
 		buffer.WriteByte(space)
 		buffer.WriteByte(prefix)
-		buffer.WriteString(m.Trailing)
+		buffer.WriteString(m.Trailing())
 	}
 
 	// We need the limit the buffer length.
