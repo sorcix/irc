@@ -1,6 +1,6 @@
 # Go **irc** package
 
-[Package Documentation][Documentation] @ godoc.org
+![Build Status](https://travis-ci.org/sorcix/irc.svg?branch=v2) [Package Documentation][Documentation] @ godoc.org
 
 ## Features
 Package irc allows your application to speak the IRC protocol.
