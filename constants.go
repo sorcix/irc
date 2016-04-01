@@ -260,3 +260,37 @@ const (
 	ERR_SASLALREADY = "907"
 	RPL_SASLMECHS   = "908"
 )
+
+// RFC2812, section 5.3
+const (
+	RPL_STATSCLINE    = "213"
+	RPL_STATSNLINE    = "214"
+	RPL_STATSILINE    = "215"
+	RPL_STATSKLINE    = "216"
+	RPL_STATSQLINE    = "217"
+	RPL_STATSYLINE    = "218"
+	RPL_SERVICEINFO   = "231"
+	RPL_ENDOFSERVICES = "232"
+	RPL_SERVICE       = "233"
+	RPL_STATSVLINE    = "240"
+	RPL_STATSLLINE    = "241"
+	RPL_STATSHLINE    = "244"
+	RPL_STATSSLINE    = "245"
+	RPL_STATSPING     = "246"
+	RPL_STATSBLINE    = "247"
+	RPL_STATSDLINE    = "250"
+	RPL_NONE          = "300"
+	RPL_WHOISCHANOP   = "316"
+	RPL_KILLDONE      = "361"
+	RPL_CLOSING       = "362"
+	RPL_CLOSEEND      = "363"
+	RPL_INFOSTART     = "373"
+	RPL_MYPORTIS      = "384"
+	ERR_NOSERVICEHOST = "492"
+)
+
+// Other constants
+const (
+	ERR_TOOMANYMATCHES = "416" // Used on IRCNet
+	RPL_TOPICWHOTIME   = "333" // From ircu, used on Freenode
+)
