@@ -280,6 +280,14 @@ var messageTests = [...]*struct {
 		rawMessage: "PASS :oauth:token_goes_here",
 		rawPrefix:  "",
 	},
+	{
+		parsed: &Message{
+			Command: "PRIVMSG",
+			Params:  []string{"#some:channel", "http://example.com"},
+		},
+		rawMessage: "PRIVMSG #some:channel :http://example.com",
+		rawPrefix:  "",
+	},
 }
 
 // -----
