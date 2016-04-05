@@ -292,5 +292,7 @@ const (
 // Other constants
 const (
 	ERR_TOOMANYMATCHES = "416" // Used on IRCNet
-	RPL_TOPICWHOTIME   = "333" // From ircu, used on Freenode
+	RPL_TOPICWHOTIME   = "333" // From ircu, in use on Freenode
+	RPL_LOCALUSERS     = "265" // From aircd, Hybrid, Hybrid, Bahamut, in use on Freenode
+	RPL_GLOBALUSERS    = "266" // From aircd, Hybrid, Hybrid, Bahamut, in use on Freenode
 )
