@@ -6,12 +6,14 @@
 
 // Documented in strings_legacy.go
 
-package irc
+package internal
 
 import (
 	"strings"
 )
 
-func indexByte(s string, c byte) int {
+// IndexByte is a compatibility function so strings.IndexByte can be used in
+// older versions of go.
+func IndexByte(s string, c byte) int {
 	return strings.IndexByte(s, c)
 }
