@@ -11,9 +11,8 @@ package ctcp
 import (
 	"fmt"
 	"runtime"
+	"strings"
 	"time"
-
-	"gopkg.in/sorcix/irc.v1/internal"
 )
 
 // Various constants used for formatting CTCP messages.
@@ -54,7 +53,7 @@ func Decode(text string) (tag, message string, ok bool) {
 		return empty, empty, false
 	}
 
-	s := internal.IndexByte(text, space)
+	s := strings.IndexByte(text, space)
 
 	if s < 0 {
 
@@ -82,10 +81,11 @@ func Encode(tag, message string) (text string) {
 	case len(message) > 0:
 		return string(delimiter) + tag + string(space) + message + string(delimiter)
 
-	}
-
 	// Tagged data without a message
-	return string(delimiter) + tag + string(delimiter)
+	default:
+		return string(delimiter) + tag + string(delimiter)
+
+	}
 }
 
 // Action is a shortcut for Encode(ctcp.ACTION, message).

@@ -9,10 +9,10 @@
 //
 // This code may be removed when Wheezy is no longer supported.
 
-package internal
+package irc
 
-// IndexByte implements strings.IndexByte for Go versions < 1.2.
-func IndexByte(s string, c byte) int {
+// indexByte implements strings.IndexByte for Go versions < 1.2.
+func indexByte(s string, c byte) int {
 	for i := range s {
 		if s[i] == c {
 			return i
