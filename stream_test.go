@@ -36,7 +36,7 @@ func ExampleNewConn() {
 	conn.Close()
 }
 
-var stream = "PING :port80a.se.quakenet.org\r\n:port80a.se.quakenet.org PONG port80a.se.quakenet.org :port80a.se.quakenet.org\r\nPING :chat.freenode.net\r\n:wilhelm.freenode.net PONG wilhelm.freenode.net :chat.freenode.net\r\n"
+var stream = "PING port80a.se.quakenet.org\r\n:port80a.se.quakenet.org PONG port80a.se.quakenet.org port80a.se.quakenet.org\r\nPING chat.freenode.net\r\n:wilhelm.freenode.net PONG wilhelm.freenode.net chat.freenode.net\r\n"
 
 var result = [...]*Message{
 	{
@@ -47,8 +47,8 @@ var result = [...]*Message{
 		Prefix: &Prefix{
 			Name: "port80a.se.quakenet.org",
 		},
-		Command:  PONG,
-		Params:   []string{"port80a.se.quakenet.org", "port80a.se.quakenet.org"},
+		Command: PONG,
+		Params:  []string{"port80a.se.quakenet.org", "port80a.se.quakenet.org"},
 	},
 	{
 		Command: PING,
@@ -58,8 +58,8 @@ var result = [...]*Message{
 		Prefix: &Prefix{
 			Name: "wilhelm.freenode.net",
 		},
-		Command:  PONG,
-		Params:   []string{"wilhelm.freenode.net", "chat.freenode.net"},
+		Command: PONG,
+		Params:  []string{"wilhelm.freenode.net", "chat.freenode.net"},
 	},
 }
 
