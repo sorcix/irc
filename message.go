@@ -24,7 +24,7 @@ func cutsetFunc(r rune) bool {
 	return r == '\r' || r == '\n'
 }
 
-// Objects implementing the Sender interface are able to send messages to an IRC server.
+// Sender represents objects that are able to send messages to an IRC server.
 //
 // As there might be a message queue, it is possible that Send returns a nil
 // error, but the message is not sent (yet). The error value is only used when

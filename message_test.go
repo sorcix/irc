@@ -5,9 +5,34 @@
 package irc
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
+
+func ExampleParseMessage() {
+	message := ParseMessage("JOIN #help")
+
+	fmt.Println(message.Params[0])
+
+	// Output: #help
+}
+
+func ExampleMessage_String() {
+	message := &Message{
+		Prefix: &Prefix{
+			Name: "sorcix",
+			User: "sorcix",
+			Host: "myhostname",
+		},
+		Command:  "PRIVMSG",
+		Trailing: "This is an example!",
+	}
+
+	fmt.Println(message.String())
+
+	// Output: :sorcix!sorcix@myhostname PRIVMSG :This is an example!
+}
 
 var messageTests = [...]*struct {
 	parsed     *Message
@@ -268,6 +293,14 @@ var messageTests = [...]*struct {
 		rawMessage: ":name!user@example.org PRIVMSG #test :Message with spaces at the end!  ",
 		rawPrefix:  "name!user@example.org",
 		hostmask:   true,
+	},
+	{
+		parsed: &Message{
+			Command: "PASS",
+			Params:  []string{"oauth:token_goes_here"},
+		},
+		rawMessage: "PASS oauth:token_goes_here",
+		rawPrefix:  "",
 	},
 }
 

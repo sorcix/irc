@@ -1,8 +1,7 @@
 # Go **irc** package
 
-[Package Documentation][Documentation] @ godoc.org
-
-[![Build Status](https://drone.io/github.com/sorcix/irc/status.png)](https://drone.io/github.com/sorcix/irc/latest)
+[![Build Status](https://travis-ci.org/sorcix/irc.svg?branch=master)](https://travis-ci.org/sorcix/irc)
+[![GoDoc](https://godoc.org/gopkg.in/sorcix/irc.v1?status.svg)](https://godoc.org/gopkg.in/sorcix/irc.v1)
 
 ## Features
 Package irc allows your application to speak the IRC protocol.
@@ -13,6 +12,18 @@ Package irc allows your application to speak the IRC protocol.
  - Well [documented][Documentation] code.
 
 *This package does not manage your entire IRC connection. It only translates the protocol to easy to use Go types. It is meant as a single component in a larger IRC library, or for basic IRC bots for which a large IRC package would be overkill.*
+
+## Usage
+
+```
+import "gopkg.in/sorcix/irc.v1"
+```
+
+There is also an *unstable* v2 branch featuring an updated Message struct:
+
+```
+import "gopkg.in/sorcix/irc.v2"
+```
 
 ### Message
 The [Message][] and [Prefix][] types provide translation to and from IRC message format.
@@ -63,10 +74,10 @@ Servers:
  - https://github.com/nightexcessive/excessiveircd
 
 
-[Documentation]: https://godoc.org/github.com/sorcix/irc "Package documentation by Godoc.org"
-[Message]: https://godoc.org/github.com/sorcix/irc#Message "Message type documentation"
-[Prefix]: https://godoc.org/github.com/sorcix/irc#Prefix "Prefix type documentation"
-[Encoder]: https://godoc.org/github.com/sorcix/irc#Encoder "Encoder type documentation"
-[Decoder]: https://godoc.org/github.com/sorcix/irc#Decoder "Decoder type documentation"
-[Conn]: https://godoc.org/github.com/sorcix/irc#Conn "Conn type documentation"
+[Documentation]: https://godoc.org/gopkg.in/sorcix/irc.v1 "Package documentation by Godoc.org"
+[Message]: https://godoc.org/gopkg.in/sorcix/irc.v1#Message "Message type documentation"
+[Prefix]: https://godoc.org/gopkg.in/sorcix/irc.v1#Prefix "Prefix type documentation"
+[Encoder]: https://godoc.org/gopkg.in/sorcix/irc.v1#Encoder "Encoder type documentation"
+[Decoder]: https://godoc.org/gopkg.in/sorcix/irc.v1#Decoder "Decoder type documentation"
+[Conn]: https://godoc.org/gopkg.in/sorcix/irc.v1#Conn "Conn type documentation"
 [RFC1459]: https://tools.ietf.org/html/rfc1459.html "RFC 1459"
