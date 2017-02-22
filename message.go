@@ -204,7 +204,7 @@ func ParseMessage(raw string) (m *Message) {
 
 	// Find prefix for trailer
 	i = strings.Index(raw[j:], " :")
-	if i > 0 {
+	if i >= 0 {
 		i += j
 		m.Trailing = raw[i+2:]
 
@@ -219,8 +219,6 @@ func ParseMessage(raw string) (m *Message) {
 	// Parse Parameters
 	if i > j {
 		m.Params = strings.Split(strings.Trim(raw[j:i], " "), string(space))
-	} else {
-		m.Params = []string{}
 	}
 
 	return m
