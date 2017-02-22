@@ -205,11 +205,7 @@ func ParseMessage(raw string) (m *Message) {
 	// Skip space after command
 	j++
 
-	// Find prefix for trailer
-	i = indexByte(raw[j:], prefix)
-
-	if i < 0 {
-
+	if raw[j] == prefix {
 		// There is no trailing argument!
 		m.Params = strings.Split(raw[j:], string(space))
 
@@ -217,8 +213,9 @@ func ParseMessage(raw string) (m *Message) {
 		return m
 	}
 
+	// Find prefix for trailer
 	// Compensate for index on substring
-	i = i + j
+	i = strings.Index(raw[j:], " :") + j + 1
 
 	// Check if we need to parse arguments.
 	if i > j {
