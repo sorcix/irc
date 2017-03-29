@@ -253,8 +253,10 @@ func (m *Message) Len() (length int) {
 			length = length + len(param)
 		}
 
-		// Add one for the colon in the trailing parameter
-		length++
+		if trailing := m.Trailing(); len(trailing) < 1 || strings.Contains(trailing, " ") || trailing[0] == ':' {
+			// Add one for the colon in the trailing parameter
+			length++
+		}
 	}
 
 	return
@@ -287,8 +289,11 @@ func (m *Message) Bytes() []byte {
 
 	if len(m.Params) > 0 {
 		buffer.WriteByte(space)
-		buffer.WriteByte(prefix)
-		buffer.WriteString(m.Trailing())
+		trailing := m.Trailing()
+		if len(trailing) < 1 || strings.Contains(trailing, " ") || trailing[0] == ':' {
+			buffer.WriteByte(prefix)
+		}
+		buffer.WriteString(trailing)
 	}
 
 	// We need the limit the buffer length.

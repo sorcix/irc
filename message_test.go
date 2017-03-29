@@ -77,7 +77,7 @@ var messageTests = [...]*struct {
 			Command: "JOIN",
 			Params:  []string{"#Twilight_zone"},
 		},
-		rawMessage: ":WiZ!jto@tolsun.oulu.fi JOIN :#Twilight_zone",
+		rawMessage: ":WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
 		hostmask:   true,
 	},
@@ -105,7 +105,7 @@ var messageTests = [...]*struct {
 			Command: "MODE",
 			Params:  []string{"#eu-opers", "-l"},
 		},
-		rawMessage: ":WiZ!jto@tolsun.oulu.fi MODE #eu-opers :-l",
+		rawMessage: ":WiZ!jto@tolsun.oulu.fi MODE #eu-opers -l",
 		rawPrefix:  "WiZ!jto@tolsun.oulu.fi",
 		hostmask:   true,
 	},
@@ -114,7 +114,7 @@ var messageTests = [...]*struct {
 			Command: "MODE",
 			Params:  []string{"&oulu", "+b", "*!*@*.edu", "+e", "*!*@*.bu.edu"},
 		},
-		rawMessage: "MODE &oulu +b *!*@*.edu +e :*!*@*.bu.edu",
+		rawMessage: "MODE &oulu +b *!*@*.edu +e *!*@*.bu.edu",
 	},
 	{
 		parsed: &Message{
@@ -209,7 +209,7 @@ var messageTests = [...]*struct {
 			Command: "PRIVMSG",
 			Params:  []string{"message"},
 		},
-		rawMessage: ":a!b PRIVMSG :message",
+		rawMessage: ":a!b PRIVMSG message",
 		rawPrefix:  "a!b",
 	},
 	{
@@ -240,7 +240,7 @@ var messageTests = [...]*struct {
 			Command: "TEST",
 			Params:  []string{"$@", "", "param", "Trailing"},
 		},
-		rawMessage: "TEST $@  param :Trailing",
+		rawMessage: "TEST $@  param Trailing",
 	},
 	{
 		rawMessage: ": PRIVMSG test :Invalid message with empty prefix.",
@@ -277,7 +277,7 @@ var messageTests = [...]*struct {
 			Command: "PASS",
 			Params:  []string{"oauth:token_goes_here"},
 		},
-		rawMessage: "PASS :oauth:token_goes_here",
+		rawMessage: "PASS oauth:token_goes_here",
 		rawPrefix:  "",
 	},
 	{
@@ -285,7 +285,7 @@ var messageTests = [...]*struct {
 			Command: "PRIVMSG",
 			Params:  []string{"#some:channel", "http://example.com"},
 		},
-		rawMessage: "PRIVMSG #some:channel :http://example.com",
+		rawMessage: "PRIVMSG #some:channel http://example.com",
 		rawPrefix:  "",
 	},
 }
