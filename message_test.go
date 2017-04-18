@@ -288,6 +288,14 @@ var messageTests = [...]*struct {
 		rawMessage: "PRIVMSG #some:channel http://example.com",
 		rawPrefix:  "",
 	},
+	{
+		parsed: &Message{
+			Command: "PRIVMSG",
+			Params:  []string{"#some:channel", "http://example.com"},
+		},
+		rawMessage: "PRIVMSG #some:channel :http://example.com",
+		rawPrefix:  "",
+	},
 }
 
 // -----
