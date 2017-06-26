@@ -8,6 +8,7 @@ import (
 	"bufio"
 	"io"
 	"net"
+	"crypto/tls"
 	"sync"
 )
 
@@ -44,6 +45,18 @@ func NewConn(rwc io.ReadWriteCloser) *Conn {
 // then returns a new Conn for the connection.
 func Dial(addr string) (*Conn, error) {
 	c, err := net.Dial("tcp", addr)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return NewConn(c), nil
+}
+
+// DialTLS connects to the given address using tls.Dial and
+// then returns a new Conn for the connection.
+func DialTLS(addr string, config *tls.Config) (*Conn, error) {
+	c, err := tls.Dial("tcp", addr, config)
 
 	if err != nil {
 		return nil, err
