@@ -4,7 +4,7 @@
 
 package irc
 
-// Various prefixes extracted from RFC1459.
+// Various prefixes extracted from RFC 1459.
 const (
 	Channel     = '#' // Normal channel
 	Distributed = '&' // Distributed channel
@@ -16,7 +16,7 @@ const (
 	Voice        = '+' // User has voice +v
 )
 
-// User modes as defined by RFC1459 section 4.2.3.2.
+// User modes as defined by RFC 1459 section 4.2.3.2.
 const (
 	UserModeInvisible     = 'i' // User is invisible
 	UserModeServerNotices = 's' // User wants to receive server notices
@@ -24,7 +24,7 @@ const (
 	UserModeOperator      = 'o' // Server operator
 )
 
-// Channel modes as defined by RFC1459 section 4.2.3.1
+// Channel modes as defined by RFC 1459 section 4.2.3.1
 const (
 	ModeOperator   = 'o' // Operator privileges
 	ModeVoice      = 'v' // Ability to speak on a moderated channel
@@ -41,7 +41,7 @@ const (
 	ModeHalfOperator = 'h' // Half-operator privileges (non-standard)
 )
 
-// IRC commands extracted from RFC2812 section 3 and RFC2813 section 4.
+// IRC commands extracted from RFC 2812 section 3 and RFC 2813 section 4.
 const (
 	PASS     = "PASS"
 	NICK     = "NICK"
@@ -92,7 +92,7 @@ const (
 	NJOIN    = "NJOIN"
 )
 
-// Numeric IRC replies extracted from RFC2812 section 5.
+// Numeric IRC replies extracted from RFC 2812 section 5.
 const (
 	RPL_WELCOME           = "001"
 	RPL_YOURHOST          = "002"
@@ -261,7 +261,7 @@ const (
 	RPL_SASLMECHS   = "908"
 )
 
-// RFC2812, section 5.3
+// RFC 2812 section 5.3
 const (
 	RPL_STATSCLINE    = "213"
 	RPL_STATSNLINE    = "214"
