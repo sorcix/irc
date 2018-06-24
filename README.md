@@ -15,41 +15,47 @@ Package irc allows your application to speak the IRC protocol.
 
 ## Usage
 
-```
+```go
 import "gopkg.in/sorcix/irc.v2"
 ```
 
 ### Message
 The [Message][] and [Prefix][] types provide translation to and from IRC message format.
 
-    // Parse the IRC-encoded data and stores the result in a new struct.
-    message := irc.ParseMessage(raw)
+```go
+// Parse the IRC-encoded data and stores the result in a new struct.
+message := irc.ParseMessage(raw)
 
-    // Returns the IRC encoding of the message.
-    raw = message.String()
+// Returns the IRC encoding of the message.
+raw = message.String()
+```
 
 ### Encoder & Decoder
 The [Encoder][] and [Decoder][] types allow working with IRC message streams.
 
-    // Create a decoder that reads from given io.Reader
-    dec := irc.NewDecoder(reader)
+```go
+// Create a decoder that reads from given io.Reader
+dec := irc.NewDecoder(reader)
 
-    // Decode the next IRC message
-    message, err := dec.Decode()
+// Decode the next IRC message
+message, err := dec.Decode()
 
-    // Create an encoder that writes to given io.Writer
-    enc := irc.NewEncoder(writer)
+// Create an encoder that writes to given io.Writer
+enc := irc.NewEncoder(writer)
 
-    // Send a message to the writer.
-    enc.Encode(message)
+// Send a message to the writer.
+enc.Encode(message)
+```
 
 ### Conn
 The [Conn][] type combines an [Encoder][] and [Decoder][] for a duplex connection.
 
-    c, err := irc.Dial("irc.server.net:6667")
+```go
+c, err := irc.Dial("irc.server.net:6667")
 
-    // Methods from both Encoder and Decoder are available
-    message, err := c.Decode()
+// Methods from both Encoder and Decoder are available
+message, err := c.Decode()
+```
 
 [Documentation]: https://godoc.org/gopkg.in/sorcix/irc.v2 "Package documentation by Godoc.org"
 [Message]: https://godoc.org/gopkg.in/sorcix/irc.v2#Message "Message type documentation"
