@@ -6,9 +6,9 @@ package irc
 
 import (
 	"bufio"
+	"crypto/tls"
 	"io"
 	"net"
-	"crypto/tls"
 	"sync"
 )
 
@@ -19,7 +19,7 @@ const delim byte = '\n'
 
 var endline = []byte("\r\n")
 
-// A Conn represents an IRC network protocol connection.
+// A Conn represents an IRC network protocol client connection.
 // It consists of an Encoder and Decoder to manage I/O.
 type Conn struct {
 	Encoder
@@ -68,6 +68,61 @@ func DialTLS(addr string, config *tls.Config) (*Conn, error) {
 // Close closes the underlying ReadWriteCloser.
 func (c *Conn) Close() error {
 	return c.conn.Close()
+}
+
+// A Server represents an IRC network protocol server connection.
+// It implements the net.Listener interface and consists of an Encoder and
+// Decoder to manage I/O.
+type Server struct {
+	Encoder
+	Decoder
+
+	conn io.ReadWriteCloser
+}
+
+// NewServer creates a new IRC server for the given ReadWriteCloser.
+func NewServer(rwc io.ReadWriteCloser) *Server {
+	return &Server{
+		Encoder: Encoder{
+			writer: rwc,
+		},
+		Decoder: Decoder{
+			reader: bufio.NewReader(rwc),
+		},
+		conn: rwc,
+	}
+}
+
+// Accept accepts a new connection to the server.
+func (s *Server) Accept() (net.Conn, err) {
+	return s.conn.Accept()
+}
+
+// Close closes the underlying ReadWriteCloser.
+func (s *Server) Close() error {
+	return s.conn.Close()
+}
+
+// Listen creates a new server without tls.
+func Listen(addr string) (*Server, error) {
+	s, err := net.Listen("tcp", addr)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return NewServer(s), nil
+}
+
+// ListenTLS creates a new server with the given tls.Config.
+func ListenTLS(addr string, config *tls.Config) (*Server, error) {
+	s, err := tls.Listen("tcp", addr, config)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return NewServer(s), nil
 }
 
 // A Decoder reads Message objects from an input stream.
