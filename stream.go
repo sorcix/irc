@@ -6,9 +6,9 @@ package irc
 
 import (
 	"bufio"
+	"crypto/tls"
 	"io"
 	"net"
-	"crypto/tls"
 	"sync"
 )
 
