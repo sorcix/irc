@@ -202,38 +202,26 @@ func ParseMessage(raw string) (m *Message) {
 		return m
 	}
 
-	// Skip space after command
-	j++
-
 	// Find prefix for trailer
-	i = indexByte(raw[j:], prefix)
+	i = strings.Index(raw[j:], " :")
+	if i >= 0 {
+		i += j
+		m.Trailing = raw[i+2:]
 
-	if i < 0 || raw[j+i-1] != space {
-
-		// There is no trailing argument!
-		m.Params = strings.Split(raw[j:], string(space))
-
-		// We're done here!
-		return m
+		// We need to re-encode the trailing argument even if it was empty.
+		if len(m.Trailing) <= 0 {
+			m.EmptyTrailing = true
+		}
+	} else {
+		i = len(raw)
 	}
 
-	// Compensate for index on substring
-	i = i + j
-
-	// Check if we need to parse arguments.
+	// Parse Parameters
 	if i > j {
-		m.Params = strings.Split(raw[j:i-1], string(space))
-	}
-
-	m.Trailing = raw[i+1:]
-
-	// We need to re-encode the trailing argument even if it was empty.
-	if len(m.Trailing) <= 0 {
-		m.EmptyTrailing = true
+		m.Params = strings.Split(strings.Trim(raw[j:i], " "), string(space))
 	}
 
 	return m
-
 }
 
 // Len calculates the length of the string representation of this message.
