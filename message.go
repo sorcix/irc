@@ -158,6 +158,15 @@ type Message struct {
 	Params  []string
 }
 
+// Param returns the i'th parameter.
+// Returns the empty string if the requested parameter does not exist.
+func (m *Message) Param(i int) string {
+	if i < 0 || i >= len(m.Params) {
+		return ""
+	}
+	return m.Params[i]
+}
+
 // Trailing returns the last parameter.
 // Returns the empty string if there are no parameters.
 func (m *Message) Trailing() string {
