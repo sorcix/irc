@@ -158,6 +158,8 @@ type Message struct {
 	Params  []string
 }
 
+// Trailing returns the last parameter.
+// Returns the empty string if there are no parameters.
 func (m *Message) Trailing() string {
 	if len(m.Params) > 0 {
 		return m.Params[len(m.Params)-1]
