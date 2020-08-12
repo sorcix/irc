@@ -438,6 +438,30 @@ func TestMessage_Len(t *testing.T) {
 	}
 }
 
+func TestMessage_Param(t *testing.T) {
+	msg := &Message{
+		Params: []string{"foo", "bar", "baz"},
+	}
+
+	tests := [...]struct {
+		i     int
+		value string
+	}{
+		{i: 0, value: "foo"},
+		{i: 2, value: "baz"},
+		{i: 99, value: ""},
+		{i: -1, value: ""},
+	}
+	for i, test := range tests {
+		p := msg.Param(test.i)
+		if p != test.value {
+			t.Errorf("Failed to get parameter: %d", i)
+			t.Logf("Output: %s", p)
+			t.Logf("Expected: %s", test.value)
+		}
+	}
+}
+
 func TestParseMessage(t *testing.T) {
 	var p *Message
 
